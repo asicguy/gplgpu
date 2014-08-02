@@ -1,0 +1,116 @@
+Thank you for downloading the ASICSolutions 2D/ 3D Graphics IP Core.
+This IP is written in verilog/ systemverilog and has been tested using
+the Synopsys VCS simulator and the Mentor Graphics Modelsim/ Questasim.
+The IP is licensed under the GPL v3 license. As this applies to hardware, if 
+you develop any hardware system utilizing this code the entire ASIC or FPGA
+containing the Ip must be licensed under the GPL v3 and source made available.
+
+Commercial licenses are available. Contact: fbruno_at_asicsolutions.com
+
+The following is the overall direction structure of the IP:
+
+root
+|
++--- build
+|      Altera and Xilinx projects
++--- hdl
+|     | Source for the hardware
+|     +--- altera*
+|     |      Altera IP
+|     +--- bios_internal
+|     |      Internal BIOS ROM
+|     +--- clk_gen
+|     |      Clock generator core
+|     +--- clk_switch
+|     |      Clock switcher for CRT
+|     +--- crt+sp
+|     |      Single Pixel CRT controller
+|     +--- de
+|     |      Drawing Engine
+|     +--- de3d
+|     |      Drawing Engine 3D components
+|     +--- dlp
+|     |      Display List Processor
+|     +--- generic
+|     |      generic components
+|     +--- graph_core
+|     |      Graphics Core
+|     +--- hbi
+|     |      Host Bus Interface
+|     +--- include
+|     |      Include files
+|     +--- lucy_tc
+|     |      Texture Cache
+|     +--- math
+|     |      Floating point ALU and Math
+|     +--- mc_cache
+|     |      Cache for Memory Controller 128/256
+|     +--- mc_graph
+|     |      Memory Controller
+|     +--- pll_intf
+|     |      PLL interface
+|     +--- ram_based
+|     |      Ram based components
+|     +--- ramdac_sp
+|     |      Digital RAMDAC/ Cursor
+|     +--- top
+|     |      Top level
+|     +--- VGA
+|            IBM compatible VGA
++--- run
+|     |
+|     +--- 2d_blend
+|     |      3D blending tests
+|     +--- 2d_bpp16
+|     |      16 BPP 2D tests
+|     +--- 2d_bpp32
+|     |      32 BPP 2D tests
+|     +--- 2d_bpp8
+|     |      8 BPP 2D tests
+|     +--- 2d_expected
+|     |      Expected Results for 2D
+|     +--- 3d_expected
+|     |      Expected Results for 3D
+|     +--- 3d_tests
+|     |      3D tests
+|     +--- 3d_tests2
+|     |      3D tests
+|     +--- 3d_tests3
+|     |      3D tests
+|     +--- 3d_tests4
+|     |      3D tests
+|     +--- bin
+|     |      executable
+|     +--- decalalpha
+|     |      decal alpha test
+|     +--- display_expected
+|     |      RAMDAC/ CRT expected results
+|     +--- display_tests
+|     |      RAMDAC/ CRT tests
+|     +--- mem_files
+|     |      textures and z buffers
+|     +--- ms_win_expected
+|     |      MS windows expected results
+|     +--- ms_win_tests
+|     |      MS windows tests
+|     +--- nmn
+|     |      Nearest Mipmapped Nearest test
+|     +--- t2r_errata
+|            T2R errata tests
++--- stim
+      Stimulus
+
+Running the test suite:
+under the run directory and test suite, use the command 'runsim -a'
+This will run all tests and put the results in passed/ failed/ no_expected.
+Without any changes the tests should pass.
+Note, with the current state of runsim, the default simulator is VCS. There is commented out code for running modelsim/ questa. The tests are set to run with a data width of 128. I'll add in updates to run 64 and 32 bit wide memory interfaces in the near future.
+
+Running a single test:
+
+Building a project:
+
+2D/3D/NoVGA:
+There are options which I will define in detail once I verify operation.
+Currently the core is setup to implement a 2D/ 3D core with VGA.
+Leaving out the VGA should work fine. I have not tried the 2D option in a while, so it may not currently work correctly. This is my first priority.

@@ -1,0 +1,21 @@
+#!/bin/bash
+# Cleanup all files before checking in or archiving
+for file in 2d_* 3d_* decalalpha fog_lin ms_win_test nmn t2r_errata
+do
+    echo "Processing $file"
+    rm $file/junk
+    rm $file/core
+    rm $file/*~
+    rm $file/*.vpd
+    rm -rf $file/csrc
+    rm $file/data.bmp
+    rm $file/failed
+    rm $file/no_expected
+    rm $file/passed
+    rm $file/diff
+    rm -rf $file/simv*
+    rm $file/the_test.h
+    rm $file/verilog.log
+    rm $file/transcript
+    rm $file/results/*
+done

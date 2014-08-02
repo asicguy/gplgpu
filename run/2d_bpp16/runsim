@@ -1,0 +1,251 @@
+#!/bin/bash
+###########################
+#
+#  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+# 
+#  This program is free software; you can redistribute it and/or modify it 
+#  under the terms of the GNU General Public License as published by the Free 
+#  Software Foundation; either version 3 of the License, or (at your option) 
+#  any later version.
+#
+#  This program is distributed in the hope that it will be useful, but 
+#  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+#  or FITNESS FOR A PARTICULAR PURPOSE. 
+#  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along with
+#  this program; if not, see <http:#www.gnu.org/licenses>.
+#
+#  This code is available under licenses for commercial use. Please contact
+#  Francis Bruno for more information.
+#
+#  http://www.gplgpu.com
+#  http://www.asicsolutions.com
+#  
+# runsim
+# this utility runs the Silicon Spectrum test suite
+# Directory structure:
+# Root: this is the directory to run the stuff in
+# Root->tests: tests are stored gzipped
+# Root->results: gzipped logs and bmps are stored here
+# Root->2d_expected: link to expected file directories
+#
+# runsim [-v bmp | txt] [-a | -f filename | -t test]
+#
+# -vm: Verify Method
+#      bmp: Use a graphical bitmap compare
+#      txt: Use the classical text mode compare
+#
+# -a:  Verify all tests
+# -f:  Verify a list of files
+# -t:  Verify a single test
+
+# setup defaults
+verify_method=txt
+build_list=b_build32_fast
+mode=all
+usage="Usage: $0 [-v bmp | txt] [-a | -f filename | -t test] [-b build_list]"
+
+while getopts "v:af:t:b:" opt; do
+  case $opt in
+    v ) verify_method=$OPTARG
+	if [verify_method != "txt" || verify_method != "bmp"]; then
+	  echo "Illegal Verify Method"
+	  exit 1
+	fi
+	;;
+    a ) mode=all;;
+    f ) mode=list
+        filename=$OPTARG ;;
+    t ) mode=single
+        filename=$OPTARG ;;
+    b ) build_list=$OPTARG ;;
+    \? ) echo $usage
+         exit 1 ;;
+  esac
+done
+
+# First pass through remove pass and fail lists
+rm -f passed
+rm -f failed
+rm -f no_expected
+echo "16 bit Tests Passed:" > passed
+echo "16 bit Tests Failed:" > failed
+echo "16 bit No Expected:" > no_expected
+
+case $mode in
+    all ) 
+
+    for i in $( ls tests/*.h.gz ); do
+    # get the file name
+    file_with_path=${i##/*/}
+    file_name=${file_with_path//tests\//}
+	file_no_gz=${file_name%.gz}
+    file_base=${file_name%.h.gz}
+    # Copy over the file
+    echo running test: $file_no_gz
+	cp $file_with_path the_test.h.gz
+    gunzip -f the_test.h.gz
+	
+    # pre clean-up the directory for running
+    rm -f diff
+	rm -f junk
+    rm -f junk.bmp
+    rm -f verilog.log
+    
+    # Run MTI
+    #echo | vlib work
+    #sync
+    #echo | vlog -sv -f ../../stim/${build_list} -incr +notimingchecks
+    #sync
+    #echo | vsim max_core_3d_stim < vsim_command.do > verilog.log
+    # Run VCS 
+    echo | vcs -full64 -R -Mupdate -sverilog +notimingchecks +vcs+nostdout -f ../../stim/${build_list} -l verilog.log -j8
+    sync
+    echo "running awk"
+    if [ -f ./../2d_expected/$file_base.bmp ]
+    then echo "Found Expected Bit Map"
+    else
+	echo "No Expected Bit Map Exist"
+	echo $file_base >> no_expected
+    fi
+    if [ -f junk ]
+    then
+	./vlbitmap junk > $(pwd)/junk.bmp
+	echo "running diff"
+	diff -q junk.bmp ./../2d_expected/$file_base.bmp > diff
+	if grep differ diff; then
+	    echo "Test failed"
+	    echo $file_no_gz >> failed
+	else 
+	    echo "Test passed"
+	    echo $file_no_gz >> passed
+	fi
+    else 
+	echo "Output from test does not exist"
+	echo $file_base
+	echo "Failed"
+	exit 1
+    fi
+    gzip junk.bmp
+    gzip verilog.log
+    
+    mv junk.bmp.gz results/$file_base.bmp.gz
+    mv verilog.log.gz results/$file_base.log.gz
+    done
+    ;;
+    list )
+    for i in $( more $filename ); do
+    # get the file name
+    file_with_path=${i##/*/}
+    file_name=${file_with_path//tests\//}
+	file_no_gz=${file_name%.gz}
+    file_base=${file_name%.h.gz}
+    # Copy over the file
+    echo running test: $file_no_gz
+	cp $file_with_path the_test.h.gz
+    gunzip -f the_test.h.gz
+	
+    # pre clean-up the directory for running
+    rm -f diff
+    rm -f junk
+    rm -f junk.bmp
+    rm -f verilog.log
+    
+    # Run MTI
+    echo | vlog -f ../../stim/${build_list} -incr +notimingchecks
+    sync
+    echo | vsim REV2_STIM < vsim_command > verilog.log
+    # Run VCS 
+    echo | vcs -full64 -R -Mupdate -sverilog +notimingchecks +vcs+nostdout -f ../../stim/${build_list} -l verilog.log -j8
+    sync
+    echo "running awk"
+    if [ -f ./../2d_expected/$file_base.bmp ]
+    then echo "Found Expected Bit Map"
+    else
+	echo "No Expected Bit Map Exist"
+	echo $file_base >> no_expected
+    fi
+    if [ -f junk ]
+    then
+	./vlbitmap junk > $(pwd)/junk.bmp
+	echo "running diff"
+	diff -q junk.bmp ./../2d_expected/$file_base.bmp > diff
+	if grep differ diff; then
+	    echo "Test failed"
+	    echo $file_no_gz >> failed
+	else 
+	    echo "Test passed"
+	    echo $file_no_gz >> passed
+	fi
+    else 
+	echo "Output from test does not exist"
+	echo $file_base
+	echo "Failed"
+	exit 1
+    fi
+    
+    gzip junk.bmp
+    gzip verilog.log
+    
+    mv junk.bmp.gz results/$file_base.bmp.gz
+    mv verilog.log.gz results/$file_base.log.gz
+    done
+    ;;
+    single )
+    i=$filename
+    # get the file name
+    file_with_path=${i##/*/}
+    file_name=${file_with_path//tests\//}
+    file_no_gz=${file_name%.gz}
+    file_base=${file_name%.h.gz}
+    # Copy over the file
+    echo running test: $file_no_gz
+	cp $file_with_path the_test.h.gz
+    gunzip -f the_test.h.gz
+	
+    # pre clean-up the directory for running
+    rm -f diff
+    rm -f junk
+    rm -f junk.bmp
+    rm -f verilog.log
+    
+    # Run MTI
+    echo | vlog -f ../../stim/${build_list} -incr +notimingchecks
+    sync
+    echo | vsim REV2_STIM < vsim_command > verilog.log
+    # Run VCS 
+    echo | vcs -full64 -R -Mupdate -sverilog +notimingchecks +vcs+nostdout -f ../../stim/${build_list} -l verilog.log -j8
+    sync
+    echo "running awk"
+    if [ -f ./../2d_expected/$file_base.bmp ]
+    then echo "Found Expected Bit Map"
+    else
+	echo "No Expected Bit Map Exist"
+	echo $file_base >> no_expected
+    fi
+    if [ -f junk ]
+    then
+	./vlbitmap junk > $(pwd)/junk.bmp
+	echo "running diff"
+	diff -q junk.bmp ./../2d_expected/$file_base.bmp > diff
+	if grep differ diff; then
+	    echo "Test failed"
+	    echo $file_no_gz >> failed
+	else 
+	    echo "Test passed"
+	    echo $file_no_gz >> passed
+	fi
+    else 
+	echo "Output from test does not exist"
+	echo $file_base
+	echo "Failed"
+	exit 1
+    fi
+    gzip junk.bmp
+    gzip verilog.log
+    
+    mv junk.bmp.gz results/$file_base.bmp.gz
+    mv verilog.log.gz results/$file_base.log.gz
+    ;;
+  esac

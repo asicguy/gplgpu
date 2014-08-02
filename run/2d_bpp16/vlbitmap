@@ -1,0 +1,2 @@
+awk -f ./bitmap.awk $1
+
