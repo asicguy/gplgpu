@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>Sample Waveforms for dpram_64_32x32_be.v </title>
+</head>
+<body>
+<h2><CENTER>Sample behavioral waveforms for design file dpram_64_32x32_be.v </CENTER></h2>
+<P>The following waveforms show the behavior of altsyncram megafunction for the chosen set of parameters in design dpram_64_32x32_be.v. For the purpose of this simulation, the contents of the memory at the start of the sample waveforms is assumed to be ( FFFFFFF0, FFFFFFF1, FFFFFFF2, FFFFFFF3, ...). The design dpram_64_32x32_be.v has one read port and one write port. The read port has 64 words of 32 bits each and the write port has 32 words of 64 bits each. The output of the read port is unregistered. </P>
+<CENTER><img src=dpram_64_32x32_be_wave0.jpg> </CENTER>
+<P><CENTER><FONT size=2>Fig. 1 : Wave showing read operation. </CENTER></P>
+<P><FONT size=3>The above waveform shows the behavior of the design under normal read conditions. The read happens at the rising edge of the enabled clock cycle. The output from the RAM is undefined until after the first rising edge of the read clock. The clock enable on the read side input registers are disabled. </P>
+<CENTER><img src=dpram_64_32x32_be_wave1.jpg> </CENTER>
+<P><CENTER><FONT size=2>Fig. 2 : Waveform showing write operation </CENTER></P>
+<P><FONT size=3>The above waveform shows the behavior of the design under normal write conditions. The write cycle is assumed to be from the rising edge of the enabled clock in which wren is high till the rising edge of the next clock cycle. In DUAL_PORT mode, when the write happens at the same address as the one being read in the other port, the read output is unknown. Actual write into the RAM happens at the rising edge or falling edge of the write clock, depending on whether the RAM blocks are assigned to M-RAM or not. In the sample waveforms, they are shown to be on the falling edge of the write clock. The clock enable on the write side input registers are disabled. </P>
+<CENTER><img src=dpram_64_32x32_be_wave2.jpg> </CENTER>
+<P><CENTER><FONT size=2>Fig. 3 : Waveform showing write operation with byte enable ports </CENTER></P>
+<P><FONT size=3>The above waveform shows the behavior of the design under write conditions using byteenable ports. </P>
+<P></P>
+</body>
+</html>

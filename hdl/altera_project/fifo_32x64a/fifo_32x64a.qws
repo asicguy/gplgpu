@@ -1,0 +1,5 @@
+[ProjectWorkspace]
+ptn_Child1=Frames
+ptn_Child2=ActionPoints
+[ProjectWorkspace.Frames]
+ptn_Child1=ChildFrames

@@ -1,0 +1,127 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+// 
+//  This program is free software; you can redistribute it and/or modify it 
+//  under the terms of the GNU General Public License as published by the Free 
+//  Software Foundation; either version 3 of the License, or (at your option) 
+//  any later version.
+//
+//  This program is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+//  or FITNESS FOR A PARTICULAR PURPOSE. 
+//  See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along with
+//  this program; if not, see <http://www.gnu.org/licenses>.
+//
+//  This code is available under licenses for commercial use. Please contact
+//  Francis Bruno for more information.
+//
+//  http://www.gplgpu.com
+//  http://www.asicsolutions.com
+//
+//  Title       :  
+//  File        :  
+//  Author      :  Jim MacLeod
+//  Created     :  14-May-2011
+//  RCS File    :  $Source:$
+//  Status      :  $Id:$
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Description : 
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Modules Instantiated:
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Modification History:
+//
+//  $Log:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
+/* 	   	TASK TO SETUP PCI BASE REGISTERS	 	     	      */
+/******************************************************************************/
+task pci_base;
+
+  input [31:0] mw0_base;
+  input [31:0] mw1_base;
+  input [31:0] xy0_base;
+  input [31:0] xy1_base;
+  input [31:0] reg_base;
+  input [31:0] io_base;
+  input [31:0] prm_base;
+
+  begin
+
+   $display("\n Setting PCI base registers  \n");
+
+    mov_dw (CONFIG_WR, 32'h10, mw0_base, 4'h0, 1);	// Base register 0
+    mov_dw (CONFIG_WR, 32'h14, mw1_base, 4'h0, 1); 	// Base register 1
+    mov_dw (CONFIG_WR, 32'h18, xy0_base, 4'h0, 1);  	// Base register 2
+    mov_dw (CONFIG_WR, 32'h1c, xy1_base, 4'h0, 1);  	// Base register 3 
+    mov_dw (CONFIG_WR, 32'h20, reg_base, 4'h0, 1);  	// Base register 4 
+    mov_dw (CONFIG_WR, 32'h24, io_base,  4'h0, 1);  	// Base register 5
+    //assign rbase_io = io_base;				// rbase_io = base 5
+     rbase_io = io_base;				// rbase_io = base 5
+    mov_dw (CONFIG_WR, 32'h30, prm_base, 4'h0, 1);	// Expansion EPROM
+
+    mov_dw (CONFIG_WR, 32'h04, 32'h07, 4'h0, 1); // Enable IO/MEM and dis.snooping
+
+  $display("\n Read back I/O mapped `address base` registers  \n");
+
+    mov_dw (IO_WR, rbase_io + RBASE_G, {reg_base[31:16],16'h0000}, 4'h0, 1);
+    rd (IO_RD, rbase_io + RBASE_G, 1); 
+    //assign rbase_g = {reg_base[31:16],16'h0000};			
+           rbase_g = {reg_base[31:16],16'h0000};			
+    compare({reg_base[31:16],16'h0000});
+
+    mov_dw (IO_WR, rbase_io + RBASE_W, {reg_base[31:16],16'h2000}, 4'h0, 1);
+    rd (IO_RD, rbase_io + RBASE_W, 1); 
+    //assign rbase_w = {reg_base[31:16],16'h2000};			
+           rbase_w = {reg_base[31:16],16'h2000};			
+    compare({reg_base[31:16],16'h2000});
+
+    mov_dw (IO_WR, rbase_io + RBASE_A, {reg_base[31:16],16'h4000}, 4'h0, 1);
+    rd (IO_RD, rbase_io + RBASE_A, 1); 
+    //assign rbase_a = {reg_base[31:16],16'h4000};			
+           rbase_a = {reg_base[31:16],16'h4000};			
+    compare({reg_base[31:16],16'h4000});
+
+    mov_dw (IO_WR, rbase_io + RBASE_B, {reg_base[31:16],16'h6000}, 4'h0, 1);
+    rd (IO_RD, rbase_io + RBASE_B, 1); 
+    //assign rbase_b = {reg_base[31:16],16'h6000};			
+           rbase_b = {reg_base[31:16],16'h6000};			
+    compare({reg_base[31:16],16'h6000});
+
+    mov_dw (IO_WR, rbase_io + RBASE_I, {reg_base[31:16],16'h8000}, 4'h0, 1);
+    rd (IO_RD, rbase_io + RBASE_I, 1); 
+    //assign rbase_i = {reg_base[31:16],16'h8000};			
+     rbase_i = {reg_base[31:16],16'h8000};			
+    compare({reg_base[31:16],16'h8000});
+
+    rd (IO_RD, rbase_io + RBASE_E, 1);       // EPROM  address reg
+    //assign rbase_e = prm_base;			
+           rbase_e = prm_base;			
+    compare(prm_base);
+
+/******************************************************************************/
+/*			Turn on MC output drivers			      */	/******************************************************************************/
+
+	mov_dw  (IO_WR, rbase_io + CONFIG2, 32'hff1f_ffff, 4'hb, 1);
+`ifdef DEL_SAMPLING
+	mov_dw  (IO_WR, rbase_io + CONFIG2, 32'hff5f_ffff, 4'hb, 1);
+     `else
+	mov_dw  (IO_WR, rbase_io + CONFIG2, 32'hff1f_ffff, 4'hb, 1); //del.sampl
+`endif
+//enable global,de_register, interrrupts, decoder
+	mov_dw  (IO_WR, rbase_io + CONFIG1, 32'hffff_35ff, 4'hd, 1);
+
+  end
+endtask
+

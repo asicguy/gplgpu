@@ -1,0 +1,142 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+// 
+//  This program is free software; you can redistribute it and/or modify it 
+//  under the terms of the GNU General Public License as published by the Free 
+//  Software Foundation; either version 3 of the License, or (at your option) 
+//  any later version.
+//
+//  This program is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+//  or FITNESS FOR A PARTICULAR PURPOSE. 
+//  See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along with
+//  this program; if not, see <http://www.gnu.org/licenses>.
+//
+//  This code is available under licenses for commercial use. Please contact
+//  Francis Bruno for more information.
+//
+//  http://www.gplgpu.com
+//  http://www.asicsolutions.com
+//
+//  Title       :  Build file for graphics core
+//  File        :  build_list
+//  Author      :  Frank Bruno
+//  Created     :  06-18-2009
+//  RCS File    :  $Source:$
+//  Status      :  $Id:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Description : This file is used to specify the files used in the graphics 
+//                core
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Modules Instantiated:
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Modification History:
+//
+//  $Log:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// +define+RTL_ENUM=1
++define+CORE_3D=1
++define+RTL_SIM=1
++define+FAST_MEM_FULL=1
++define+BYTES=16
++define+BYTE16=1
+// Asynchronous FIFO's 
+// +define+RAM_FIFO_271x128=1
+// Synchronous FIFO's
+// +define+RAM_FIFO_104x128=1
+// +define+RAM_FIFO_36x128=1
+// +incdir+../../hdl/de
++incdir+../../hdl/include
++incdir+../../stim/seprom
++libext+.vo+
++libext+.v+
+
+/////////////////////////////////////////////////////////////////////////////
+// altera simulation stuff
+// -v ../../hdl/sim_lib/altera_primitives.v
+-v ../../hdl/sim_lib/arriaii_atoms.v
+-v ../../hdl/sim_lib/sgate.v
+-v ../../hdl/sim_lib/220model.v
+-v ../../hdl/sim_lib/altera_mf.v
+
+// Top level
+../../hdl/graph_core/graph_core.v
+
+// Top level stim
+../../stim/max_core_3d_stim.v
+
+//../../stim/ddr3_int_full_mem_model_128.v
+../../stim/avalon_fast_model_256.v
+../../stim/fast_mem_tasks.v
+-y ../../stim/seprom
+
+-y ../../hdl/dlp
+-y ../../hdl/de
+-y ../../hdl/de3d
+-y ../../hdl/math
+-y ../../hdl/generic
+-y ../../hdl/mc_graph
+-y ../../hdl/altera_ddr3_128
+-y ../../hdl/ram_based
+-y ../../hdl/hbi
+-y ../../hdl/crt_sp
+-y ../../hdl/vga
+-y ../../hdl/pll_intf
+-y ../../hdl/ramdac_sp
+-y ../../hdl/clk_switch
+-y ../../hdl/clk_gen
+-y ../../hdl/altera_fifos
+
+../../hdl/altera_clk_synth/bt_ddr_io.v
+../../hdl/mc_cache/mc_cache.v
+../../hdl/mc_cache/mc_cache_fifo_256.v
+
+../../hdl/lucy_tc/de3d_tc_top.v
+../../hdl/lucy_tc/de3d_tc_addr_in.v
+../../hdl/lucy_tc/de3d_tc_clamp.v
+../../hdl/lucy_tc/de3d_tc_compare.v
+../../hdl/lucy_tc/de3d_tc_fmt.v
+../../hdl/lucy_tc/de3d_tc_load_gen.v
+../../hdl/lucy_tc/de3d_tc_mc_sigs.v
+../../hdl/lucy_tc/de3d_tc_mc_we.v
+../../hdl/lucy_tc/de3d_tc_mem_if_addr.v
+../../hdl/lucy_tc/de3d_tc_mem_if_out.v
+../../hdl/lucy_tc/de3d_tc_sm.v
+../../hdl/lucy_tc/de3d_tc_store.v
+../../hdl/lucy_tc/de3d_tc_tag_ram.v
+../../hdl/lucy_tc/de3d_tc_tag_set.v
+../../hdl/lucy_tc/de3d_tc_tag.v
+../../hdl/lucy_tc/de3d_tc_tag_val.v
+
+../../hdl/altera_rams/ram_32x32_dp_be.v
+
+../../hdl/altera_project/dpram_32_128x16/dpram_32_128x16.v
+../../hdl/altera_project/spll_pll/spll_pll.v
+../../hdl/altera_plls/pix_pll0.v
+../../hdl/altera_project/ram_128_32x32_dp/ram_128_32x32_dp.v
+../../hdl/altera_project/fifo_128x512a/fifo_128x512a.v
+../../hdl/altera_project/fifo_32x512a/fifo_32x512a.v
+../../hdl/altera_project/fifo_32x64a/fifo_32x64a.v
+../../hdl/altera_project/fifo_57x64/fifo_57x64.v
+
+../../hdl/altera_rams/dpram_256x32.v
+../../hdl/altera_rams/dpram_64x64.v
+
+../../hdl/bios_internal/bios_internal.v
+../../hdl/bios_internal/bios_rom.v
+

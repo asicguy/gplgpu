@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE pinplan>
+<pinplan intended_family="Arria II GX" variation_name="bt_ddr_io" megafunction_name="ALTDDIO_OUT" specifies="all_ports">
+<global>
+<pin name="aclr" direction="input" scope="external"  />
+<pin name="datain_h[0..0]" direction="input" scope="external"  />
+<pin name="datain_l[0..0]" direction="input" scope="external"  />
+<pin name="outclock" direction="input" scope="external" source="clock"  />
+<pin name="dataout[0..0]" direction="output" scope="external"  />
+
+</global>
+</pinplan>

@@ -1,0 +1,36 @@
+ M25P40 SERIAL FLAH MEMORY Verilog MODEL - Release notes
+ 
+ WARNING : These Verilog models are provided "as is" without warranty of any kind, including, but not
+ limited to, any implied warranty of merchantability and fitness for a particular purpose.
+ 
+ 
+ ******************************************************************************************************************
+ *  Model Revision *  datasheet * Release Notes - News                                  *     Date      *  Author *
+ ******************************************************************************************************************
+ *     1.0         *    1.5     * Model Written based on M25P20 2.0                     * January 2003  *   HC    *
+ ******************************************************************************************************************
+ *     1.1         *    2.0     * MEMORY_ACCES.V:                                       * February 2004 *   HC    *
+ *                 *            * - correction to avoid address treatment problems      *               *	  *
+ *                 *            *   due to events evaluation races during simulation    *               *	  *
+ *                 *            *   (dependent on simulators).                          *               *  	  *
+ *                 *            *                                                       *               *	  *
+ *                 *            * ACDC_CHECK.V :                                        *               *	  *
+ *                 *            * - tCH, tCL and tSHWL checking resolution improved     *               *	  *
+ *                 *            *							*		*	  *
+ *		   *            * INTERNAL LOGIC.V:                                     *               *	  *
+ *		   *            * - tBE and tSE management improved                     *               *	  *
+ *		   *            * - tRES Bug corrected                                  *               *	  *
+ ******************************************************************************************************************
+
+
+ 
+ 
+ TECHNICAL SUPPORT
+ 
+ For current information on M25Pxx products, please consult our pages on the world wide web:
+ www.st.com/eeprom
+ 
+ If you have any questions or suggestions concerning the matters raised in this document, please send
+ them to the following electronic mail addresses:
+           apps.eeprom@st.com (for application support)
+           ask.memory@st.com (for general enquiries)

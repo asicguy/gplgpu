@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE pinplan>
+<pinplan intended_family="Arria II GX" variation_name="pix_pll0" megafunction_name="ALTPLL" specifies="all_ports">
+<global>
+<pin name="areset" direction="input" scope="external"  />
+<pin name="inclk0" direction="input" scope="external" source="clock"  />
+<pin name="c0" direction="output" scope="external" source="clock"  />
+<pin name="c1" direction="output" scope="external" source="clock"  />
+<pin name="c2" direction="output" scope="external" source="clock"  />
+<pin name="c3" direction="output" scope="external" source="clock"  />
+<pin name="c4" direction="output" scope="external" source="clock"  />
+<pin name="c5" direction="output" scope="external" source="clock"  />
+<pin name="c6" direction="output" scope="external" source="clock"  />
+<pin name="locked" direction="output" scope="external"  />
+
+</global>
+</pinplan>

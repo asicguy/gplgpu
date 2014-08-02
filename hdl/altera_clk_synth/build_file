@@ -1,0 +1,17 @@
+clk_gen_ipll_stim.v
+clk_gen_ipll.v
+pix_pll.v
+pll_config_top.v
+pll_config_intf.v
+pll_config_pll.v
+
++libext+.vo+
++libext+.v+
+
+-v /home/edatools/altera_12.0/quartus/eda/sim_lib/arriaii_atoms.v
+-v /home/edatools/altera_12.0/quartus/eda/sim_lib/altera_primitives.v
+-v /home/edatools/altera_12.0/quartus/eda/sim_lib/sgate.v
+-v /home/edatools/altera_12.0/quartus/eda/sim_lib/220model.v
+-v /home/edatools/altera_12.0/quartus/eda/sim_lib/altera_mf.v
+
+

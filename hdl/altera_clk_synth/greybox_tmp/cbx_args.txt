@@ -1,0 +1,12 @@
+INTENDED_DEVICE_FAMILY="Arria II GX"
+INVERT_OUTPUT=OFF
+LPM_HINT=UNUSED
+LPM_TYPE=altddio_out
+WIDTH=1
+DEVICE_FAMILY="Arria II GX"
+CBX_AUTO_BLACKBOX=ALL
+aclr
+datain_h
+datain_l
+dataout
+outclock

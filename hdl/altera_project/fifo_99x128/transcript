@@ -1,0 +1,6 @@
+# Reading C:/Modeltech_6.2b/tcl/vsim/pref.tcl 
+# ** Error: License checkout has been disallowed because
+# only one session is allowed to run on an uncounted nodelock
+# license and an instance of ModelSim is already running with a
+# nodelocked license on this machine
+# Unable to checkout a viewer license necessary for use of the ModelSim graphical user interface.  Vsim is closing.

@@ -1,0 +1,1790 @@
+<optimization_record_list>
+<!-- DDR3_INST -->
+<optimization_record>
+<recommendation_key>
+DDR3_INST
+</recommendation_key>
+<recommendation>
+ddr3_int
+</recommendation>
+<recommendation_description>
+Follow the recommendations to configure your core. You can start by double clicking on Add Constraints.
+</recommendation_description>
+<description>
+MegaCore variation
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+	NA
+	</action_description>
+	<action_link>
+	NA
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="100">
+	CNTRLDDR3
+	</parent>
+</parent_list>
+<logic_algorithm>
+NA
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+</tcl_script>
+</optimization_record>
+
+<!-- INFO -->
+<!-- DDR3_INST\10 -->
+<optimization_record>
+<recommendation_key>
+INFO
+</recommendation_key>
+<recommendation>
+Information
+</recommendation>
+<recommendation_description>
+The following recommendations provide a flow for your DDR3 SDRAM memory interface design.
+</recommendation_description>
+<description>
+The controller consists of an example driver, DDR3 controller, and a top level design.
+The controller instantiates an instance of the ALTMEMPHY megafunction which in turn instantiates a PLL and DLL. You can optionally instantiate the DLL outside the ALTMEMPHY megafunction to share the DLL between multiple instances of the ALTMEMPHY megafunction.
+The example driver is a self-test module that issues read and write commands to the controller and checks the read data to produce the pass or fail and test complete signals.
+
+The walkthrough provides some recommended settings in order to simplify the design, including termination scheme and drive strength settings.
+This walkthrough can also be found in AN:436 Design Guidelines for Implementing DDR3 SDRAM Interfaces in Stratix III and Stratix IV Devices.
+</description>
+<more_info_link>
+http://www.altera.com/literature/an/an436.pdf
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+	Follow the steps outlined in this IP Advisor to complete the DDR3 SDRAM memory interface design. Click Add Constraints in the left panel.
+	</action_description>
+	<action_link>
+	NA
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+exampletopblkdgrm.bmp
+</image_path>
+<parent_list>
+	<parent priority="10">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- TBD ppt pg14: Once all Action are completed, it should have a check to indicate the actions were performed.  can only have a check mark if done via tcl -->
+<!-- ADD -->
+<!-- DDR3_INST\20 -->
+<optimization_record>
+<recommendation_key>
+ADD
+</recommendation_key>
+<recommendation>
+Add Constraints
+</recommendation>
+<recommendation_description>
+The following recommendations guide you in adding appropriate constraints.
+</recommendation_description>
+<description>
+Add Constraints
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+	NA
+	</action_description>
+	<action_link>
+	NA
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="20">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- CONSTRAINT_SCRIPT -->
+<!-- DDR3_INST\ADD\10 -->
+<optimization_record>
+<recommendation_key>
+CONSTRAINT_SCRIPT
+</recommendation_key>
+<recommendation>
+Timing Constraints Script
+</recommendation>
+<recommendation_description>
+Make sure that the generated SDC file is added to the project.
+</recommendation_description>
+<description>
+Instantiating the DDR3 SDRAM High Performance Controller generates constraint files for the design.
+The timing constraint file, ddr3_int_phy_ddr_timing.sdc, constrains the clock and input/output delay on the DDR3 SDRAM High Performance Controller.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To view or add the SDC file:
+1) Click Open Settings dialog box - Timing Analysis Settings page.
+2) Click TimeQuest Timing Analyzer in the Category list to view or add the SDC file. 
+3) Type or browse to the SDC file location.
+4) Select the SDC file and click Add.
+	</action_description>
+	<action_link>
+	SETD_TIMING
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="SDC_FILE">
+		ddr3_int_phy_ddr_timing.sdc
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+ddr3sdc.bmp
+</image_path>
+<parent_list>
+	<parent priority="10">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+
+<!-- ADD_PIN -->
+<!-- DDR3_INST\ADD\20 -->
+<optimization_record>
+<recommendation_key>
+ADD_PIN_DQ
+</recommendation_key>
+<recommendation>
+Add Pin and DQ Group Assignments
+</recommendation>
+<recommendation_description>
+Run the Tcl script to add the recommended pin assignments and DQ group assignments.
+If your top level design pin names do not match the default pin names, edit the names in the Tcl script file before running.
+</recommendation_description>
+<description>
+The pin assignment script, ddr3_int_pin_assignments.tcl, sets up the I/O standards for the DDR3 SDRAM memory interface and launches the DQ group assignment script, ddr3phy_assign_dq_groups.tcl, which relates the DQ and DQS pin groups together for correct Fitter placement in the Quartus II software.
+
+Note: The Tcl script does not create a clock for the design. You need to create a clock for the design and provide pin assignments for the signals of both the example driver and testbench that were generated with the MegaCore variation.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Click Open Tcl Scripts dialog box to run the ddr3_int_pin_assignments.tcl script.
+	</action_description>
+	<action_link>
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="20">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+</tcl_script>
+</optimization_record>
+
+
+<!-- ADD_TOP -->
+<!-- DDR3_INST\ADD\30 -->
+<optimization_record>
+<recommendation_key>
+ADD_TOP
+</recommendation_key>
+<recommendation>
+Set top-level entity
+</recommendation>
+<recommendation_description>
+Set your design's top-level file as the top-level entity of the project.
+In the example design set the variation_name_example_top to the top-level entity, since it instantiates the SDRAM high performance controller and the example driver.
+For any other design, choose the file that calls the user logic and the controller as the top-level entity.
+</recommendation_description>
+<description>
+Before compiling the design, set the top-level entity of the project to the desired entity.
+     -- The ALTMEMPHY megafunction entity is called ddr3_int_phy.v.
+     -- The DDR3 Controller MegaCore entity is called ddr3_int.v.
+     -- The example top-level design, which instantiates the DDR3 Controller and an example driver, is called ddr3_int_example_top.v.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Set the top-level file. You can do this in several ways:
+
+Open the file in the Quartus II software then in the Project menu click Set as Top-Level Entity
+  OR
+  1) On the Assignments menu, click Settings
+  2) On Settings window, click General in the Category list and type or browse to the file you want to set as the top-level entity.
+ 
+For the example design, you can click Correct the Settings below.
+	</action_description>
+	<action_link>
+	SETD
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="TOP_LEVEL_ENTITY">
+		ddr3_int_example_top
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="30">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+SETTING
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- ADD_OPT -->
+<!-- DDR3_INST\ADD\40 -->
+<optimization_record>
+<recommendation_key>
+ADD_OPT
+</recommendation_key>
+<recommendation>
+Set Optimization Technique
+</recommendation>
+<recommendation_description>
+Set Analysis and Synthesis to optimize for speed
+</recommendation_description>
+<description>
+Set up the Quartus II software to ensure the remaining unconstrained paths are routed with the highest speed and efficiency by setting the Optimization technique to Speed.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Set the Optimization Technique to the Speed setting. Click the Open Settings dialog box - Analysis and Synthesis Settings page link below to turn on Speed in the Optimization Technique box.
+	</action_description>
+	<action_link>
+	SETD_ANALYSIS_SYNTHESIS
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+opttec.bmp
+</image_path>
+<parent_list>
+	<parent priority="40">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+SETTING
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- ADD_FIT_EFF -->
+<!-- DDR3_INST\ADD\50 -->
+<optimization_record>
+<recommendation_key>
+ADD_FIT_EFF
+</recommendation_key>
+<recommendation>
+Set Fitter Effort and Timing Driven Compilation
+</recommendation>
+<recommendation_description>
+Set Fitter effort to Auto Fit.
+Set Fitter to optimize hold timing on all paths.
+</recommendation_description>
+<description>
+Set Fitter effort to "Auto Fit".
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	N
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Click Open Settings dialog box - Fitter Settings page below to:  
+1) In the Timing-driven compilation box, select All Paths from the Optimize Hold Timing list.
+2) Select Auto Fit in the Fitter effort box.
+	</action_description>
+	<action_link>
+	SETD_FITTER
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="FITTER_EFFORT">
+		AUTO FIT
+		</acf_variable>
+		<acf_variable name="OPTIMIZE_HOLD_TIMING">
+		ALL PATHS
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="50">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+SETTING
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- PROJECT_PLANNING -->
+<!-- DDR3_INST\ADD\60 -->
+<optimization_record>
+<recommendation_key>
+PROJECT_PLANNING
+</recommendation_key>
+<recommendation>
+Resource Planning
+</recommendation>
+<recommendation_description>
+The following recommendations help plan your pin selections.
+</recommendation_description>
+<description>
+NA
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+	NA
+	</action_description>
+	<action_link>
+	NA
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="60">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- PIN_PLAN -->
+<!-- DDR3_INST\PROJECT_PLANNING\10 -->
+<optimization_record>
+<recommendation_key>
+PIN_PLAN 
+</recommendation_key>
+<recommendation>
+Pin Planning
+</recommendation>
+<recommendation_description>
+Place your memory interface pins according to the following recommendations.
+</recommendation_description>
+<description>
+Altera recommends the following pin placements:  
+
+Note: If your design uses on-chip termination (OCT), verify that the Rup/Rdn pins are assigned correctly. If the specified Rup/Rdn pins are in a x4 DQS/DQ group, you cannot use the remaining unallocated pins of that DQS/DQ group for your memory interface. You can still use the x16/x18 and x32/x36 groups containing that x4 group. There are also restrictions on using x8/x9 groups that include these x4 groups.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Use the information given in the table and assign pin locations in the next step - Pin Placement.
+</action_description>
+	<action_link>
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>ddr3pins.bmp
+</image_path>
+<parent_list>
+	<parent priority="10">
+	PROJECT_PLANNING
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- PIN_PLACE -->
+<!-- DDR3_INST\PROJECT_PLANNING\20 -->
+<optimization_record>
+<recommendation_key>
+PIN_PLACE
+</recommendation_key>
+<recommendation>
+Pin Placement
+</recommendation>
+<recommendation_description>
+Altera recommends matching each DQS pin in your design to the required DQS pin in the Pin Planner. The Quartus II Fitter then automatically places the respective DQ signals onto suitable DQ pins within each group.
+</recommendation_description>
+<description>
+To see DQS groups in the Pin Planner, right click anywhere in Top View Flip Chip box and select Show DQ/DQS Pins, then click In x8/x9 Mode. Pin Planner shows each DQS group in a different color and with a different legend, for example: S  DQS pin, Sbar  DQSn pin and Q = DQ pin. See figure below.
+Most DDR3 SDRAM devices operate in x8/x9 mode, however since some DDR3 SDRAM devices operate in x4 mode, refer to your specific memory device datasheet.
+Note: DQ group order and DQ pin order within each group is not important. However, you must place DQ pins in the same group as their respective strobe pin.
+To identify differential I/O pairs, right-click in Pin Planner and select Show Differential Pin Pair Connections. Pin pairs show a red line between each pin pair.
+Note: You must place mem_clk and mem_clk_n on a DIFFIO_RX pin pair.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To assign pin locations, open the Pin Planner and follow these steps:
+1) Assign DQ and DQS pins.
+   Select the DQ mode to match the DQ group width (number of DQ pins/number of DQS pins) of your memory device. DQ mode is not related to the memory interface width.
+2) Place DM pins within their respective DQ group.
+3) Place address and control command pins on any spare I/O pins ideally within the same bank or side of the device as the mem_clk pins.
+4) Verify that mem_clk pins are placed on differential I/O pairs for the CK/CK# pin pair. 
+5) Place the clock_source pin on a dedicated PLL clock input pin with a direct connection to the SDRAM controller PLL and DLL pair, usually on the same side of the device as your memory interface. 
+   Note: This recommendation reduces PLL jitter, saves a global clock resource, and eases timing and fitter effort.
+6) Place the global_reset_n pin (like any high fan-out signal) on a dedicated clock pin.
+</action_description>
+	<action_link>
+	PINPLANNER
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>ddr2pinplanner.bmp
+</image_path>
+<parent_list>
+	<parent priority="20">
+	PROJECT_PLANNING
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- VIRTUAL_PIN -->
+<!-- DDR3_INST\ADD\PROJECT_PLANNING\30 -->
+<optimization_record>
+<recommendation_key>
+VIRTUAL_PIN
+</recommendation_key>
+<recommendation>
+Virtual Pins
+</recommendation>
+<recommendation_description>
+Set non-memory interface pins with no board locations to virtual pins.
+</recommendation_description>
+<description>
+A virtual pin is an I/O element that is temporarily mapped to a logic element and not to a pin during compilation.
+
+The example top-level design, that is auto generated by the high performance controller, includes an example driver to stimulate the interface. This example driver is not part of the SDRAM high performance controller IP, but allows easy testing of the IP.
+The example driver outputs several test signals to indicate its operation and the status of the stimulated memory interface. 
+These signals are pnf, pnf_per_byte, and test_complete. You should take such signals to either a debug header or set the signals to virtual pin using the Quartus II Assignment Editor.
+When using the example driver for testing, do not remove these signals from the top-level signal list. Otherwise the Quartus II software optimizes the driver away, and the example driver fails.
+Note: The memory interface pins (DQ, DQS, DM, CK, CK#, address and command) cannot be assigned as virtual pins.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Open the Assignment Editor and follow the steps:
+1) Select the pin
+2) In the Assignment Name column, right-click and click Edit Cell. Select Virtual Pin from the list.
+3) Double-click in the Value column and select On.
+</action_description>
+	<action_link>
+	AE
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>ddr2virtualpins.bmp
+</image_path>
+<parent_list>
+	<parent priority="30">
+	PROJECT_PLANNING
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- IO_TIMING -->
+<!-- DDR3_INST\ADD\70 -->
+<optimization_record>
+<recommendation_key>
+IO_TIMING
+</recommendation_key>
+<recommendation>
+Advanced I/O Timing
+</recommendation>
+<recommendation_description>
+You should take board-level signal integrity and timing into account as part of I/O planning, especially with high-speed designs. When adding an FPGA device with high-speed interfaces to a board design, the quality of the signal at the far end of the board route and the propagation delay in getting there are vital for proper system operation.
+The advanced I/O timing option is turned on by default for Stratix III and Stratix IV devices.
+Start by double-clicking Board Trace Model Assignment below or in the IP Advisor navigation tree.
+</recommendation_description>
+<description>
+NA
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+	NA
+	</action_description>
+	<action_link>
+	NA
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="70">
+	ADD
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+
+<!-- BOARD_TRACE_MODEL -->
+<!-- DDR3_INST\ADD\IO_TIMING\10 -->
+<optimization_record>
+<recommendation_key>
+BOARD_TRACE_MODEL
+</recommendation_key>
+<recommendation>
+Board Trace Model Assignment
+</recommendation>
+<recommendation_description>
+You must complete the Board Trace Model definition for each signal to ensure that I/O timing performance is correctly modeled in the Quartus II software. More precise board trace models result in more accurate TimeQuest timing analysis.
+</recommendation_description>
+<description>
+Board trace models include two transmission line segments (near and far). These line segments are ideal for SDRAM interfaces. You can use the near transmission line to represent the PCB and the far transmission line to represent the DIMM.
+
+The board trace model should only include PCB or off chip information. Do not include the FPGA device I/O pin and package capacitance, OCT, or drive strength settings, since the Quartus II software ascertains these dynamically. 
+ODT at the memory should be included as external discreet termination and the capacitive loading of the memory should be calculated for each net and also added.
+Note: Ideally, the distributed capacitance and inductance of your PCB traces should be ascertained from your PCB development tool. However, in general a 50-ohm trace is approximately 3 pF and 8nH per inch.
+Trace delay information can be entered on a per net basis if desired, but a net group basis should generally be sufficient. Multiple nets can be selected at the same time and then have their respective board trace models all entered simultaneously. Altera recommends the following net groups:
+    * mem_clk
+    * mem_addr (mem_a and mem_ba)
+    * mem_ctrl (mem_cas#, mem_cke, mem_cs_n, mem_odt, mem_ras_n, mem_we_n)
+    * mem_dq_groups (groups0: mem_dq[7..0], mem_dm[0]; group1: mem_dq[15..8], mem_dm[1], ...)
+    * mem_dqs and mem_dqsn groups (group0: mem_dqs[0], mem_dqsn[0]; group1: mem_dqs[1], mem_dqsn[1], ...)
+
+Note: The DQS pin can be combined with the respective DQ group as a single-ended signal, otherwise each differential DQS pin pair should be entered separately.
+DIMM board trace models and SDRAM component capacitive loading information should be obtained from your memory vendor directly and must be included into your Quartus II board trace model parameters.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To enter board trace information, follow these steps:
+1) Open Pin Planner, select the pin or group of pins for which you want to enter board trace information.
+2) Right-click and select Board Trace Model.
+3) Enter all the values for all the parameters shown in the figure above.
+	</action_description>
+	<action_link>
+	PINPLANNER
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>ddr3boardtracemodel.bmp
+</image_path>
+<parent_list>
+	<parent priority="10">
+	IO_TIMING
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+</tcl_script>
+</optimization_record>
+
+<!-- TPD_SIII -->
+<!-- DDR3_INST\ADD\IO_TIMING\20 -->
+<optimization_record>
+<recommendation_key>
+TPD_SIII
+</recommendation_key>
+<recommendation>
+Additional Propagation Delay
+</recommendation>
+<recommendation_description>
+To ensure that IO timing performance is correctly modeled in Quartus II, it is necessary to add any additional propagation delay for the memory interface.
+</recommendation_description>
+<description>
+ALTMEMPHY-based designs assume that the memory address/command and their respected clock signals board propagation delays are the same by assuming that their traces are matched in length. Typically, this assumption is not true for DIMM-based designs.
+You should verify if this assumption holds in your design. If not, then the mismatch value must be entered as t(additional_addresscmd_tpd) in ddr3_int_phy_report_timing.sdc file.
+If the address and command signal traces are longer than clock traces, then enter the difference value as a positive number in the SDC file and if shorter as a negative number.
+
+In the example design, the address and command signals are 380 ps shorter than the clock signals. As the figure below shows the additional address and command delay should be added in the SDC file.
+
+If the trace length difference of DQS and DQ within the same group is more than the board skew entered in MegaWizard parameterization step, you should enter the max and min of the variation lengths in ddr3_int_phy_report_timing.sdc file.
+The values must be entered as t(min_additional_dqs_variation) and t(max_additional_dqs_variation).
+
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+1) Open ddr3_int_phy_ddr_timing.sdc
+2) Search and modify the parameter or parameters of interest
+3) Save the SDC
+
+Note that every time your controller gets regenerated the additional manual changes to the SDC will be erased hence you must reenter the delays.
+	</action_description>
+	<action_link>
+	NA
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	stratix iii
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>ddr3tpd.bmp
+</image_path>
+<parent_list>
+	<parent priority="20">
+	IO_TIMING
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+
+<!-- RTL_SIM -->
+<!-- DDR3_INST\30 -->
+<!-- TBD ppt pg12: When simulation is completed, it should have a check.  can have a check mark only if launch simulation via tcl script -->
+<optimization_record>
+<recommendation_key>
+RTL_SIM
+</recommendation_key>
+<recommendation>
+Perform RTL Simulation (Optional)
+</recommendation>
+<recommendation_description>
+During the instantiation of the DDR3 SDRAM High Performance Controller, there is an option to generate a simulation model of the IP so you can perform functional simulation on your design.
+</recommendation_description>
+<description>
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+	</action_description>
+	<action_link>
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+</image_path>
+<parent_list>
+	<parent priority="30">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+
+<!-- SETUP_SIM -->
+<!-- DDR3_INST\RTL_SIM\10 -->
+<optimization_record>
+<recommendation_key>
+SETUP_SIM
+</recommendation_key>
+<recommendation>
+Setup Simulation Files
+</recommendation>
+<recommendation_description>
+Altera recommends that you use the actual memory device model for simulation purposes. You can obtain the model from your memory device vendor.
+</recommendation_description>
+<description>
+If you have selected to generate a simulation model during the instantiation of the DDR3 SDRAM High Performance Controller, you will find a folder called testbench in your project directory that includes the testbench file for your design and a generic memory model.
+You have the option to use the generic or the vendor's memory model for simulation.
+To use the vendor memory model, you should obtain the memory model files from the vendor and save them in the testbench directory. Also, you must modify the memory instantiation in the testbench accordingly.
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+If you are using the generic memory model provided by Altera, you do not need to take any action here, go to the next step to set up simulation settings in the Quartus II software.
+
+The following steps advise you on using vendor memory models:
+1) Obtain and copy the vendor memory model to a suitable location. For example, obtain the ddr3.v and ddr3_parameters.vhd memory model files from the Micron website and save them in the testbench directory.
+2) Open the memory model file in a text editor and add the two define statements to prepare the DDR3 SDRAM memory interface model.
+   The first statement specifies the memory device speed grade. The second statement specifies the memory device width per DQS.
+   For example, the define statements below are for memory device with -25 as speed grade and x8 DQS/DQ group.
+    'define sg25
+    'define x8
+3) Open the testbench in a text editor, instantiate the downloaded memory model, and connect its signals to the rest of the design.
+4) You must delete the START and END MEGAWIZARD comments to ensure the MegaWizard Plug-In Manager does not overwrite the changes when the controller megafunction is regenerated.
+5) Go to the next step to set up simulation settings and run RTL simulation in the Quartus II software.
+	</action_description>
+	<action_link>
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>ddr3RTLsim.bmp
+</image_path>
+<parent_list>
+	<parent priority="10">
+	RTL_SIM
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- RUN_SIM_N -->
+<!-- DDR3_INST\RTL_SIM\20 -->
+<optimization_record>
+<recommendation_key>
+RUN_SIM_N
+</recommendation_key>
+<recommendation>
+Setup and run an RTL simulation with NativeLink
+</recommendation>
+<recommendation_description>
+Altera recommends following the instructions in this page to setup and run an RTL simulation.
+</recommendation_description>
+<description>
+For NativeLink simulation, set the third party simulator tool path and setup the simulation settings as instructed below.
+If you are not running a NativeLink simulation, verify that you are adding the proper libraries to your DO file.
+For sample waveforms, refer to the DDR3 SDRAM High Performance Controller User Guide.
+</description>
+<more_info_link>
+http://www.altera.com/literature/ug/ug_ddr3_sdram.pdf
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To setup and run the simulation with NativeLink, follow these steps:
+1) Click the link below to open the Assignments menu, in the left panel under EDA Tool Settings, click Simulation.
+------- Setup -------
+2) Under Tool Name, select a simulator like Modelsim-Altera.
+   * Verify that you have set the proper path to the selected simulator tool.
+     To set a path, you should exit the Assignment window and
+     a) In Tools menu, click Options.
+     b) Under General, click EDA Tool Options.
+     c) Double click Location of executable of the tool for which you are setting the path.
+3) Go back to the EDA Tool Settings window, Simulation page and in NativeLink settings, select Compile test bench and click Test Benches.
+4) Click New.
+5) In the New Test Bench Settings dialog box, enter a name for the Test bench name.
+6) Enter the name of the automatically generated testbench, ddr3_int_example_top_tb, in Top level module in test bench.
+7) Enter the name of the top-level instance in Design instance in test bench.
+8) Under Simulation period, either enter a specific time to set the length of the simulation or select Run until all vector stimuli is used.
+9) Add the testbench files and memory model files. 
+10) In the New Testbench Settings dialog box, click OK.
+11) Click OK.
+------- Run -------
+12) On the Processing menu point to Start then click Start Analysis and Elaboration.
+13) Once Analysis and Elaboration is successfully finished, on the Tools menu, point to EDA Simulation Tool then click Run EDA RTL Simulation. 
+    This step creates the \simulation directory in your project directory and a script that compiles all necessary files and runs the simulation.
+	</action_description>
+	<action_link>
+	SETD
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+</image_path>
+<parent_list>
+	<parent priority="20">
+	RTL_SIM
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- RUN_SIM-->
+<!-- DDR3_INST\RTL_SIM\30 -->
+<optimization_record>
+<recommendation_key>
+RUN_SIM
+</recommendation_key>
+<recommendation>
+Run Simulation without Nativelink
+</recommendation>
+<recommendation_description>
+If you are running the RTL simulation outside of the Quartus II software, use the information in this page to create your script.
+</recommendation_description>
+<description>
+You should develop your own simulation script for simulations other than Nativelink simulation.
+In the script you should specify:
+-- Your targeted device
+-- Model files, including:
+   * altera_primitives.v
+   * device_atoms.v (Device specific ATOM model)
+   * 220model.v 
+   * sgate.v 
+   * device_hssi_atoms.v 
+   * device_pcie_hip_atoms.v 
+   * altera_mf.v 
+-- Design specific files, including:
+   * top-level design name (i.e. user RTL or VO netlist file name)
+   * test bench name
+   * the top level instance name for listed testbench
+-- Setup work library and compile model files if needed
+-- Invoke simulator
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+Find the files above in the instalation_directory\quartus_version\quartus\eda\sim_lib directory.
+Add them to your simulation script, and run the script.
+	</action_description>
+	<action_link>
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+</image_path>
+
+<parent_list>
+	<parent priority="30">
+	RTL_SIM
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+</tcl_script>
+</optimization_record>
+
+<!-- CMP_AIIGX -->
+<!-- DDR3_INST\40 -->
+<optimization_record>
+<recommendation_key>
+CMP_AIIGX
+</recommendation_key>
+<recommendation>
+Compile Design and Verify Timing
+</recommendation>
+<recommendation_description>
+Compile your design and verify the DDR timing report by running the Tcl file - ddr3_int_phy_report_timing.tcl
+</recommendation_description>
+<description>
+The DDR timing report reports the following margins on the following paths:
+-- Address/command setup and hold margin
+-- Half rate address/command setup and hold margin
+-- Core setup and hold margin
+-- Core reset/removal setup and hold margin
+-- Write setup and hold margin
+-- Read capture setup and hold margin
+
+The report timing script does not perform timing analysis on the write/read leveling circuitry datapath of the DDR3 SDRAM as the timing of these datapaths is guaranteed by design.
+</description>
+<more_info_link>
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+1) Click Start Compile below to compile the design.
+
+2) Once the compilation is successfully finished, verify timing 
+-- Click on Open TimeQuest Timing Analyzer below
+   a) Double click Create Timing Netlist in the Tasks list.
+   b) Double click Report DDR in the Tasks list.
+      -> You can click on any Report to get the detailed specific timing report.
+      -> After a task is executed, it turns green.
+
+If the timing report shows any timing violations, proceed to the Adjust constraints section.	
+	</action_description>
+		<action_link>
+	TCL_SCRIPTS
+	</action_link>
+	<action_link>
+	TIMEQUEST
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	arria iigx
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+ddr3tclaiigx.bmp
+</image_path>
+<parent_list>
+	<parent priority="40">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="Start Compilation" quartus_exe="quartus_sh">
+dummy.tcl
+</tcl_script>
+</optimization_record>
+
+<!-- CMP_SIII_SIV -->
+<!-- DDR3_INST\40 -->
+<optimization_record>
+<recommendation_key>
+CMP_SIII_SIV
+</recommendation_key>
+<recommendation>
+Compile Design and Verify Timing
+</recommendation>
+<recommendation_description>
+Compile your design and verify the DDR timing report by running the Tcl file - ddr3_int_phy_report_timing.tcl
+</recommendation_description>
+<description>
+The DDR timing report reports the following margins on the following paths:
+-- Address/command setup and hold margin
+-- Half rate address/command setup and hold margin
+-- Core setup and hold margin
+-- Core reset/removal setup and hold margin
+-- Write setup and hold margin
+-- Read capture setup and hold margin
+
+The report timing script does not perform timing analysis on the write/read leveling circuitry datapath of the DDR3 SDRAM as the timing of these datapaths is guaranteed by design.
+</description>
+<more_info_link>
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+1) Click on Start Compile below to compile the design.
+
+2) Once the compilation is successfully finished, verify timing 
+-- Click on Open TimeQuest Timing Analyzer below
+   a) Double click Create Timing Netlist in the Tasks list.
+   b) Double click Report DDR in the Tasks list.
+      -> You can click on any Report to get the detailed specific timing report.
+      -> After a task is executed, it turns green.
+
+If the timing report shows any timing violations, proceed to the Adjust constraints section.	
+	</action_description>
+		<action_link>
+	TCL_SCRIPTS
+	</action_link>
+	<action_link>
+	TIMEQUEST
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	stratix iii
+	</device_family>
+	<device_family exclude="">
+	stratix iv
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+ddr3tcl.bmp
+</image_path>
+<parent_list>
+	<parent priority="40">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="Start Compilation" quartus_exe="quartus_sh">
+dummy.tcl
+</tcl_script>
+</optimization_record>
+
+
+<!-- ADJUST_AIIGX -->
+<!-- DDR3_INST\50 -->
+<!-- TBD ppt pg16: In the Action row, import all the setup and hold timing margins from TimeQuest Timing Analyzer after performing the Report DDR3 task.  need a tcl script to do that -->
+<optimization_record>
+<recommendation_key>
+ADJUST_AIIGX
+</recommendation_key>
+<recommendation>
+Adjust Constraints
+</recommendation>
+<recommendation_description>
+If the reported setup or hold is negative, quite small or unbalanced, you should adjust the clock that is feeding the output registers of the paths showing the violation to improve the margin.
+</recommendation_description>
+<description>
+For Example, if the timing report indicates that address command path has negative hold slack, to correct the timing, you need to increase the hold margin.
+To find out how much to increase the hold margin, if address and command clock is 150 MHz and the negative slack is 660 ps then clk6 should be delayed by at least 35 degrees.
+In order to increase the hold margin and balance the setup and hold margins, address and command clock (clk6) is delayed from 0 to 90 degrees. 
+90 degrees delay in clk6 @ 150Mhz would result in an increase in the reported hold margin by 897 ps resulting in a final hold margin of 237 ps.
+
+For more information about timing closure click More Info below to refer to AN438: Constraining and Analyzing Timing for External Memory Interfaces for detailed information on timing analysis and reporting.
+</description>
+<more_info_link>
+http://www.altera.com/literature/an/an438.pdf
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To adjust the phase shift:
+1) Find out which clock is feeding the output registers of the paths showing timing violation
+   --> In compilation report, click on Fitter, then Resource Section, and finally PLL Summary 
+   --> In TimeQuest Timing Analyzer, click on the report showing the violation in the Report panel.
+2) Find out the clock frequency, phase shift, and phase step (you can this information from PLL Summary report)
+3) Calculate the amount to modify the phase shift of the clock showing the violation to make the margin positive and balanced.
+4) Edit either the PLL output clock phase in PLL MegaWizard.
+   -> Note that for Address and Command phase shift, it is recommended to change the phase shift in controller MegaWizard because if you make the change in PLL MegaWizard and regenerate the controller, your modification will be overwritten.
+5) After modifying the phase setting, recompile the design for the new PLL setting to take effect and run the report timing script again.
+	</action_description>
+	<action_link>
+	MEGAWIZ
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	arria iigx
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+ddr3tclreportaiigx.bmp
+</image_path>
+<parent_list>
+	<parent priority="50">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+<!-- ADJUST_SIII_SIV -->
+<!-- DDR3_INST\50 -->
+<!-- TBD ppt pg16: In the Action row, import all the setup and hold timing margins from TimeQuest Timing Analyzer after performing the Report DDR3 task.  need a tcl script to do that -->
+<optimization_record>
+<recommendation_key>
+ADJUST_SIII_SIV
+</recommendation_key>
+<recommendation>
+Adjust Constraints
+</recommendation>
+<recommendation_description>
+If the reported setup or hold is negative, quite small or unbalanced, you should adjust the clock that is feeding the output registers of the paths showing the violation to improve the margin.
+</recommendation_description>
+<description>
+For Example, if the timing report indicates that address command path has negative hold slack, to correct the timing, you need to increase the hold margin.
+To find out how much to increase the hold margin, if address and command clock is 267 MHz and the negative slack is 72 ps then clk6 should be delayed by at least 10 degrees.
+In order to increase the hold margin and balance the setup and hold margins, address and command clock (clk6) is delayed from 200 to 240 degrees. 
+40 degrees delay in clk6 @ 267Mhz would result in an increase in the reported hold margin by 419 ps resulting in a final hold margin of 238 ps.
+
+For more information about timing closure click More Info below to refer to AN438: Constraining and Analyzing Timing for External Memory Interfaces for detailed information on timing analysis and reporting.
+</description>
+<more_info_link>
+http://www.altera.com/literature/an/an438.pdf
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To adjust the phase shift:
+1) Find out which clock is feeding the output registers of the paths showing timing violation.
+   -- In the Compilation report, click Fitter, then Resource Section, and finally the PLL Summary report.
+   -- In the TimeQuest Timing Analyzer, click the report showing the violation in the Report panel.
+2) Find out the clock frequency, phase shift, and phase step (you can get this information from PLL Summary report).
+3) Calculate the amount to modify the phase shift of the clock showing the violation to make the margin positive and balanced.
+4) Edit the PLL output clock phase either in PLL or in ALTMEMPHY MegaWizard.
+   Note: For Address and Command phase shift, Altera recommends you change the phase shift in controller MegaWizard because if you make the change in PLL MegaWizard and regenerate the controller, your modification will be overwritten.
+5) After modifying the phase setting, recompile the design for the new PLL setting to take effect and run the report timing script again.
+	</action_description>
+	<action_link>
+	MEGAWIZ
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	stratix iii
+	</device_family>
+	<device_family exclude="">
+	stratix iv
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+ddr3tclreport.bmp
+</image_path>
+<parent_list>
+	<parent priority="50">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+</optimization_record>
+
+
+<!-- SIGTAP -->
+<!-- DDR3_INST\60 -->
+<optimization_record>
+<recommendation_key>
+SIGTAP
+</recommendation_key>
+<recommendation>
+Verify Design Functionality on Board
+</recommendation>
+<recommendation_description>
+Use Signal Tap to verify your design's functionality on hardware.
+</recommendation_description>
+<description>
+The SignalTap II Logic Analyzer shows read and write activity in the system.
+For more information on using the SignalTap II Logic Analyzer, refer to:
+-- Design Debugging Using the SignalTap II Embedded Logic Analyzer chapter in the Quartus II Handbook
+-- AN 323: Using SignalTap II Embedded Logic Analyzers in SOPC Builder Systems
+-- AN 446: Debugging Nios II Systems with the SignalTap II Logic Analyzer
+</description>
+<more_info_link>
+NA
+</more_info_link>
+<effect_list>
+	<fmax_effect>
+	NA
+	</fmax_effect>
+	<resource_effect>
+	NA
+	</resource_effect>
+	<compilation_effect>
+	NA
+	</compilation_effect>
+</effect_list>
+<action>
+	<action_description>
+To add the SignalTap II Logic Analyzer, follow these steps:
+1) On the Tools menu click SignalTap II Logic Analyzer.
+2) In the Signal Configuration window next to the Clock box, click the Browse button to open the Node Finder dialog box.
+3) Type *phy_clk in the Named box.
+4) Set Filter select SignalTap II to pre-synthesis and click List.
+5) Select ddr3_int_dimm|ddr3_int_dimm_inst|phy_clk in Nodes Found and click right-arrow to add the signal to Selected Nodes.
+6) Click OK.
+7) Under Signal Configuration, specify the following settings:
+   -- For Sample depth, select 512
+   -- For RAM type, select Auto
+   -- For Trigger flow control, select Sequential
+   -- For Trigger position, select Center trigger position
+   -- For Trigger conditions, select 1
+8) On the Edit menu, click Add Nodes.
+9) Search for specific nodes by typing *local* in the Named box, verify that the Filter is set to SignalTap II: pre-synthesis and click List.
+10) Select the following nodes in Nodes Found and click right-arrow to add to Selected Nodes:
+     -- User logic interface signals: local_address, local_rdata, local_rdata_valid, local_read_req, local_ready, local_wdata, local_wdata_req, local_write_req
+     -- System test flag signals: pnf, pnf_per_byte, test_complete (trigger) 
+     -- Calibration flag signals: ctl_cal_success, ctl_cal_fail, ctl_wlat, ctl_rlat
+     Do not add any DDR3 SDRAM interface signals (mem_*) to the SignalTap II Logic Analyzer. The load on these signals increases and adversely affects the timing analysis.
+11) Click OK.
+-- To reduce the SignalTap II logic size, turn off Trigger Enable on wide bus signals.
+12) Right-click Trigger Conditions for the test_complete signal and select Rising Edge.
+13) On the File menu, click Save, to save the SignalTap II .stp file to your project. If you see the message Do you want to enable SignalTap II file stp1.stp for the current project, click Yes.
+14) Compile the design and verify timing.
+15) Connect the board to your computer and reopen Signal Tap II Logic Analyzer.
+16) Next to SOF Manager box Click on ...
+17) Select your_project_name.sof
+18) Click Open.
+19) To download the file, click the Program Device button.
+20) Once the FPGA device is programmed, click Run.
+
+	</action_description>
+	<action_link>
+	
+	</action_link>
+	<acf_variable_list>
+		<acf_variable name="NA">
+		
+		</acf_variable>
+	</acf_variable_list>
+</action>
+<device_family_list>
+	<device_family exclude="">
+	ALL
+	</device_family>
+</device_family_list>
+<conditions>
+</conditions>
+<image_path>
+
+</image_path>
+<parent_list>
+	<parent priority="60">
+	DDR3_INST
+	</parent>
+</parent_list>
+<logic_algorithm>
+ALWAYS
+</logic_algorithm>
+<tcl_script button_name="" quartus_exe="">
+
+</tcl_script>
+
+</optimization_record>
+
+
+</optimization_record_list>
+

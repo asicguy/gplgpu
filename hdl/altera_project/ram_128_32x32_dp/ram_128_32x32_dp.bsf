@@ -1,0 +1,118 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 1991-2005 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+*/
+(header "symbol" (version "1.1"))
+(symbol
+	(rect 0 0 256 160)
+	(text "ram_128_32x32_dp" (rect 72 1 205 17)(font "Arial" (font_size 10)))
+	(text "inst" (rect 8 144 25 156)(font "Arial" ))
+	(port
+		(pt 0 32)
+		(input)
+		(text "data[127..0]" (rect 0 0 67 14)(font "Arial" (font_size 8)))
+		(text "data[127..0]" (rect 4 19 61 32)(font "Arial" (font_size 8)))
+		(line (pt 0 32)(pt 112 32)(line_width 3))
+	)
+	(port
+		(pt 0 48)
+		(input)
+		(text "wraddress[1..0]" (rect 0 0 92 14)(font "Arial" (font_size 8)))
+		(text "wraddress[1..0]" (rect 4 35 73 48)(font "Arial" (font_size 8)))
+		(line (pt 0 48)(pt 112 48)(line_width 3))
+	)
+	(port
+		(pt 0 64)
+		(input)
+		(text "wren" (rect 0 0 30 14)(font "Arial" (font_size 8)))
+		(text "wren" (rect 4 51 26 64)(font "Arial" (font_size 8)))
+		(line (pt 0 64)(pt 112 64)(line_width 1))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "rdaddress[3..0]" (rect 0 0 87 14)(font "Arial" (font_size 8)))
+		(text "rdaddress[3..0]" (rect 4 75 72 88)(font "Arial" (font_size 8)))
+		(line (pt 0 88)(pt 112 88)(line_width 3))
+	)
+	(port
+		(pt 0 112)
+		(input)
+		(text "wrclock" (rect 0 0 46 14)(font "Arial" (font_size 8)))
+		(text "wrclock" (rect 4 99 37 112)(font "Arial" (font_size 8)))
+		(line (pt 0 112)(pt 98 112)(line_width 1))
+	)
+	(port
+		(pt 0 128)
+		(input)
+		(text "rdclock" (rect 0 0 41 14)(font "Arial" (font_size 8)))
+		(text "rdclock" (rect 4 115 36 128)(font "Arial" (font_size 8)))
+		(line (pt 0 128)(pt 104 128)(line_width 1))
+	)
+	(port
+		(pt 256 88)
+		(output)
+		(text "q[31..0]" (rect 0 0 42 14)(font "Arial" (font_size 8)))
+		(text "q[31..0]" (rect 217 75 253 88)(font "Arial" (font_size 8)))
+		(line (pt 256 88)(pt 168 88)(line_width 3))
+	)
+	(drawing
+		(text "4 Word(s)" (rect 136 39 148 80)(font "Arial" )(vertical))
+		(text "RAM" (rect 149 50 161 70)(font "Arial" )(vertical))
+		(text "Block Type: AUTO" (rect 41 140 119 152)(font "Arial" ))
+		(line (pt 128 24)(pt 168 24)(line_width 1))
+		(line (pt 168 24)(pt 168 96)(line_width 1))
+		(line (pt 168 96)(pt 128 96)(line_width 1))
+		(line (pt 128 96)(pt 128 24)(line_width 1))
+		(line (pt 112 27)(pt 120 27)(line_width 1))
+		(line (pt 120 27)(pt 120 39)(line_width 1))
+		(line (pt 120 39)(pt 112 39)(line_width 1))
+		(line (pt 112 39)(pt 112 27)(line_width 1))
+		(line (pt 112 34)(pt 114 36)(line_width 1))
+		(line (pt 114 36)(pt 112 38)(line_width 1))
+		(line (pt 98 36)(pt 112 36)(line_width 1))
+		(line (pt 120 32)(pt 128 32)(line_width 3))
+		(line (pt 112 43)(pt 120 43)(line_width 1))
+		(line (pt 120 43)(pt 120 55)(line_width 1))
+		(line (pt 120 55)(pt 112 55)(line_width 1))
+		(line (pt 112 55)(pt 112 43)(line_width 1))
+		(line (pt 112 50)(pt 114 52)(line_width 1))
+		(line (pt 114 52)(pt 112 54)(line_width 1))
+		(line (pt 98 52)(pt 112 52)(line_width 1))
+		(line (pt 120 48)(pt 128 48)(line_width 3))
+		(line (pt 112 59)(pt 120 59)(line_width 1))
+		(line (pt 120 59)(pt 120 71)(line_width 1))
+		(line (pt 120 71)(pt 112 71)(line_width 1))
+		(line (pt 112 71)(pt 112 59)(line_width 1))
+		(line (pt 112 66)(pt 114 68)(line_width 1))
+		(line (pt 114 68)(pt 112 70)(line_width 1))
+		(line (pt 98 68)(pt 112 68)(line_width 1))
+		(line (pt 120 64)(pt 128 64)(line_width 1))
+		(line (pt 112 83)(pt 120 83)(line_width 1))
+		(line (pt 120 83)(pt 120 95)(line_width 1))
+		(line (pt 120 95)(pt 112 95)(line_width 1))
+		(line (pt 112 95)(pt 112 83)(line_width 1))
+		(line (pt 112 90)(pt 114 92)(line_width 1))
+		(line (pt 114 92)(pt 112 94)(line_width 1))
+		(line (pt 104 92)(pt 112 92)(line_width 1))
+		(line (pt 120 88)(pt 128 88)(line_width 3))
+		(line (pt 98 36)(pt 98 113)(line_width 1))
+		(line (pt 104 92)(pt 104 129)(line_width 1))
+	)
+)

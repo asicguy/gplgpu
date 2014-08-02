@@ -1,0 +1,427 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+// 
+//  This program is free software; you can redistribute it and/or modify it 
+//  under the terms of the GNU General Public License as published by the Free 
+//  Software Foundation; either version 3 of the License, or (at your option) 
+//  any later version.
+//
+//  This program is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+//  or FITNESS FOR A PARTICULAR PURPOSE. 
+//  See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along with
+//  this program; if not, see <http://www.gnu.org/licenses>.
+//
+//  This code is available under licenses for commercial use. Please contact
+//  Francis Bruno for more information.
+//
+//  http://www.gplgpu.com
+//  http://www.asicsolutions.com
+//
+//  Title       :  
+//  File        :  
+//  Author      :  Jim MacLeod
+//  Created     :  14-May-2011
+//  RCS File    :  $Source:$
+//  Status      :  $Id:$
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Description : 
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Modules Instantiated:
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Modification History:
+//
+//  $Log:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
+/* 	   	TASK TO INITIALIZE MW ,CE and DE REGISTERS	 	     	      */
+/******************************************************************************/
+task reg_init;
+
+begin 
+    mov_dw  (IO_WR, rbase_io + CONFIG1,  32'h0000_1f24, 4'h0, 1); 
+
+    $display("\nInitializing Global Interrupt registers \n");
+    mov_dw  (MEM_WR, rbase_i + GINTP,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_i + GINTM,  32'h0000_0000, 4'h0, 1); 
+    rd  (MEM_RD, rbase_i + GINTP,  1); 
+    compare (32'h0000_0000);
+    rd  (MEM_RD, rbase_i + GINTM,  1); 
+    compare (32'h0000_0000);
+
+/********* SET DDC to 0 in output mode *********************/
+->discon_ddc; // just in case
+mov_dw(IO_WR, rbase_io+8'h2c, 32'h0000_0000, 4'h0, 1 ); // clear MON_INFO reg
+                                                        //data out 1 ->hz
+mov_dw(IO_WR, rbase_io+8'h2c, 32'h0000_0200, 4'h0, 1 ); // DDC2 dat 0 out
+/******/
+//clear CRT reg. to zero
+$display("clear CRT reg. ");
+for(i=8'h20; i<=8'h60;i=i+4)
+  mov_dw  (MEM_WR, rbase_g + i,  32'h0, 4'h0, 1);
+$display("CRT reg. cleared");
+
+
+
+    $display("\nInitializing DE0 registers to zero \n");
+//frst part
+// don't clear @ 8'hfc DLP has to be stopped(can write 0x8000_0000)
+   for(i=0; i<=8'hf8;i=i+4)
+     begin
+     if(i==XY1) $display("skipping XY1");
+     else
+     mov_dw  (MEM_WR, rbase_a + i,       32'h0000_0000, 4'h0, 1); 
+     end
+
+
+//sec.part
+   for(i=12'h100; i<=12'h128;i=i+4)
+     begin
+     mov_dw  (MEM_WR, rbase_a + i,       32'h0000_0000, 4'h0, 1); 
+     end
+//thrd part
+// skip 3D_triger 
+   for(i=12'h168; i<=12'h1f8;i=i+4)
+     begin
+     if(i==12'h1dc) $display("skipping 3D_TRIG");
+     else
+     mov_dw  (MEM_WR, rbase_a + i,       32'h0000_0000, 4'h0, 1); 
+     end
+
+//trigger NOOP  
+    mov_dw  (MEM_WR, rbase_a + XY1,        32'h0000_0000, 4'h0, 1); 
+//  mov_dw  (MEM_WR, rbase_a + 1DC,        32'h0000_0000, 4'h0, 1); 
+
+ $display(" DE0 registers cleared\n");
+
+
+
+/******* who the hell uncommented this out 
+    mov_dw  (MEM_WR, rbase_a + INTP,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + INTM,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + FLOW,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + BUSY,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + XYW_AD,     32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + BUF_CTRL,   32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + DE_SORG,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + DE_DORG,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + DE_KEY,     32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + DE_SPTCH,   32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + DE_DPTCH,   32'h0000_1000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + DE_ZPTCH,   32'h0000_1000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD,        32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD_OPC,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD_ROP,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD_STYLE,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD_PATRN,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD_CLP,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CMD_PF,     32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + FORE,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + BACK,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + MASK,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + LPAT,       32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + PCTRL,      32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CLPTL,      32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + CLPBR,      32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + XY1,        32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + XY2,        32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + XY3,        32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + XY4,        32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_a + XY0,        32'h0000_0000, 4'h0, 1); 
+*******/
+
+
+    $display("\nInitializing MW0 registers to zero\n");
+
+    mov_dw  (MEM_WR, rbase_w + MW0_CTRL,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW0_AD,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW0_SZ,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW0_ORG,   32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW0_WKEY,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW0_KYDAT, 32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW0_MASK,  32'h0000_0000, 4'h0, 1); 
+
+    $display("\nInitializing MW1 registers to zero\n");
+
+    mov_dw  (MEM_WR, rbase_w + MW1_CTRL,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW1_AD,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW1_SZ,    32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW1_ORG,   32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW1_WKEY,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW1_KYDAT, 32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w + MW1_MASK,  32'h0000_0000, 4'h0, 1); 
+
+    $display ("clear YUV LUT test registers ");
+    mov_dw  (MEM_WR, rbase_w +8'h58 ,  32'h0000_0000, 4'h0, 1); 
+    mov_dw  (MEM_WR, rbase_w +8'h5c ,  32'h0000_0000, 4'h0, 1); 
+
+
+$display ("/**************************************/");
+$display ("FILL MEMORY  WITH random");
+$display ("/**************************************/");
+ for(i=0;i<1024;i=i+1)
+     VR.ram_fill32(i, 1, $random);
+
+
+$display ("/**************************************/");
+$display ("             SMALL BLT                  ");
+$display ("/**************************************/");
+// Do a 1x1 blt to initialize internal registers.
+wait_for_pipe_not_busy;
+//added mask temp 
+    mov_dw  (MEM_WR, rbase_a + MASK,       32'haaaa_aaaa, 4'h0, 1); 
+
+//mov_dw(MEM_WR, rbase_a+CMD,32'h0C01, 4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+CMD,32'hf0C01, 4'h0, 1 ); //solid on
+mov_dw(MEM_WR, rbase_a+XY2,32'h10001,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,0,4'h0, 1 );
+// add second fill
+wait_for_pipe_not_busy;
+             //   gwait_for_de_a;
+mov_dw(MEM_WR, rbase_a+CMD,32'hf0601, 4'h0, 1 ); //solid on, added XOR
+mov_dw(MEM_WR, rbase_a+XY2,32'h8f0_0001,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,32'h1,4'h0, 1 );
+// add third fill
+wait_for_pipe_not_busy;
+/****
+              //  gwait_for_de_a;
+mov_dw(MEM_WR, rbase_a+XY2,32'h8f0_0001,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,32'h2,4'h0, 1 );
+// add forth fill
+wait_for_pipe_not_busy;
+              //  gwait_for_de_a;
+mov_dw(MEM_WR, rbase_a+XY2,32'h8f0_0001,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,32'h3,4'h0, 1 );
+// add fifth fill
+wait_for_pipe_not_busy;
+mov_dw(MEM_WR, rbase_a+XY2,32'h8f0_0001,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,32'h4,4'h0, 1 );
+****/
+
+
+
+
+$display ("/**************************************/");
+$display ("             SMALL LINE                  ");
+$display ("/**************************************/");
+
+wait_for_pipe_not_busy;
+                gwait_for_de_a;
+
+/***********
+// Do a 1 pixel line to initialize internal registers.
+wait_for_pipe_not_busy;
+mov_dw(MEM_WR, rbase_a+CMD,32'h8_00_0C_02, 4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY2,32'h0,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,32'h0,4'h0, 1 );
+***********/
+//// add waits
+wait_for_pipe_not_busy;
+                gwait_for_de_a;
+                gwait_for_mc_a;
+                gwait_for_prev_a;
+
+
+$display ("**********************************");
+$display ("GATE LEVEL INITIALIZATION DONE");
+$display ("**********************************");
+  end
+endtask
+
+task de_clr_reg;
+begin
+
+//***********************
+// GATE LEVEL DE SET UP
+//***********************
+//1) INITIALIZE ALL DRAWING REGISTERS TO 0
+mov_dw (MEM_WR, rbase_a+9'h20, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h24, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h28, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h2c, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h30, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h34, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h38, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h3c, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h40, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h44, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h48, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h4c, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h50, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h54, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h58, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h5c, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h60, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h64, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h68, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h6c, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h70, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h74, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h78, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h7c, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h80, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h84, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h88, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h90, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h94, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h98, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h8c, 32'h0, 4'h0, 1);
+// SECOND DE BLOCK
+mov_dw (MEM_WR, rbase_a+9'h100, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h104, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h108, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h10C, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h110, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h114, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h118, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h11C, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h120, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h124, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h128, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h168, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h170, 32'h0, 4'h0, 1);
+mov_dw (MEM_WR, rbase_a+9'h174, 32'h0, 4'h0, 1);
+
+//2) ISSUE SOFT RESET
+rd(IO_RD, rbase_io+8'h1c, 1);//read CONFIG 1 register
+mov_dw (IO_WR, rbase_io+8'h1c, (test_reg | 32'h2), 4'b1110, 1);//issue soft reset
+mov_dw (IO_WR, rbase_io+8'h1c, (test_reg | 32'h2), 4'b1110, 1);//issue soft reset
+mov_dw (IO_WR, rbase_io+8'h1c, (test_reg & 32'hffff_fffd), 4'b1110, 1);//deassert soft reset
+
+initialize(0);
+//program SGRAM after every reset !
+
+$display ("/**************************************/");
+$display ("             SMALL BLT                  ");
+$display ("/**************************************/");
+// Do a 1x1 blt to initialize internal registers.
+wait_for_pipe_not_busy;
+mov_dw(MEM_WR, rbase_a+CMD,32'h0C01, 4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY2,32'ha0_0001,4'h0, 1 );
+mov_dw(MEM_WR, rbase_a+XY1,0,4'h0, 1 );
+$display ("/**************************************/");
+$display ("             SMALL LINE                  ");
+$display ("/**************************************/");
+// Do a 1 pixel line to initialize internal registers.
+// wait_for_pipe_not_busy;
+// mov_dw(MEM_WR, rbase_a+CMD,32'h8_00_0C_02, 4'h0, 1 );
+// mov_dw(MEM_WR, rbase_a+XY2,32'h0,4'h0, 1 );
+// mov_dw(MEM_WR, rbase_a+XY1,32'h0,4'h0, 1 );
+                gwait_for_de_a;
+                gwait_for_mc_a;
+                gwait_for_prev_a;
+$display ("**********************************");
+$display ("GATE LEVEL INITIALIZATION DONE");
+$display ("**********************************");
+end
+endtask
+
+
+
+
+///// clear VRAM buffer for tests
+task ce_vramclr;
+
+begin
+
+`ifdef DISP_32M
+VR.ram_fill32 (0, 32'h800000,32'h0);
+`else
+// fills 8MEG -1
+VR.ram_fill32 (0, 21'h1fffff,32'h0);
+
+`endif
+
+
+end
+endtask
+
+//// clear DRAM buffer
+task ce_dramclr;
+ 
+begin
+$display ("NO VIRTUAL BUFFER");
+$stop;
+end
+endtask
+
+
+///// set VRAM buffer for tests
+task ce_vramset;
+ 
+begin
+ 
+`ifdef DISP_32M
+
+VR.ram_fill32 (0,32'h800000,32'hffff_ffff);
+ 
+`else
+// fills 8MEG -1
+VR.ram_fill32 (0,21'h1fffff,32'hffff_ffff);
+
+`endif
+end
+endtask
+ 
+//// set DRAM buffer
+task ce_dramset;
+ 
+begin
+$display ("NO VIRTUAL BUFFER");
+$stop;
+end
+endtask
+ 
+
+///// clear VRAM buffer for tests
+task ce_vramspec;
+reg[32:0] ind;
+begin
+
+`ifdef DISP_32M
+for (ind=0;ind<(32'h800000 - 4'h8);ind=ind+8)
+begin
+VR.ram_fill32 ( (ind)  ,4 ,32'h0000_0000);
+VR.ram_fill32 ( (ind+4),4 ,32'hffff_ffff);
+end
+
+`else
+// fills 8MEG
+for (ind=0;ind<(32'h200000 -4'h8) ;ind=ind+8)
+ begin
+VR.ram_fill32 ( (ind)  ,4 ,32'h0000_0000);
+VR.ram_fill32 ( (ind+4),4 ,32'hffff_ffff);
+end
+`endif
+
+
+end
+endtask
+
+///// clear DRAM buffer for tests
+task ce_dramspec;
+
+begin
+$display ("NO VIRTUAL BUFFER");
+$stop;
+end
+endtask
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,109 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+// 
+//  This program is free software; you can redistribute it and/or modify it 
+//  under the terms of the GNU General Public License as published by the Free 
+//  Software Foundation; either version 3 of the License, or (at your option) 
+//  any later version.
+//
+//  This program is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+//  or FITNESS FOR A PARTICULAR PURPOSE. 
+//  See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along with
+//  this program; if not, see <http://www.gnu.org/licenses>.
+//
+//  This code is available under licenses for commercial use. Please contact
+//  Francis Bruno for more information.
+//
+//  http://www.gplgpu.com
+//  http://www.asicsolutions.com
+//
+//  Title       :  
+//  File        :  
+//  Author      :  Jim MacLeod
+//  Created     :  14-May-2011
+//  RCS File    :  $Source:$
+//  Status      :  $Id:$
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Description : 
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Modules Instantiated:
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Modification History:
+//
+//  $Log:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+
+/******************************************************************************/
+/*    	TASK TO COMPARE EXPECTED DATA WITH ACTUAL DATA	 	     	      */
+/******************************************************************************/
+task compare;
+
+input [31:0] expected;
+
+  begin
+
+
+
+`ifdef DISPLAY_TIME
+
+    if (expected == test_reg)
+      $display("Expected data =%h  Actual data = %h  Comparison PASSED",
+               expected,test_reg, $time);
+    else
+      $display("Expected data =%h  Actual data = %h  Comparison FAILED !!!! !!!!",
+               expected,test_reg, $time);
+ 
+`else
+
+    if (expected == test_reg)
+      $display("Expected data =%h  Actual data = %h  Comparison PASSED",
+               expected,test_reg);
+    else
+      $display("Exp.data=%b Act.data=%b Comparison FAILED !",
+               expected,test_reg);
+
+`endif   // DISPLAY_TIME 
+
+
+/* 			Write to compare_file if enabled				*/
+
+
+`ifdef COMPARE_FILE
+
+`ifdef DISPLAY_TIME
+
+    if (expected == test_reg)
+      $fdisplay(channel, "Expected data =%h  Actual data = %h  Comparison PASSED",
+               expected,test_reg, $time);
+    else
+      $fdisplay(channel, "Expected data =%h  Actual data = %h  Comparison FAILED !!!!",
+               expected,test_reg, $time);
+ 
+`else
+
+    if (expected == test_reg)
+      $fdisplay(channel, "Expected data =%h  Actual data = %h  Comparison PASSED",
+               expected,test_reg);
+    else
+      $fdisplay(channel, "Expected data =%h  Actual data = %h  Comparison FAILED !!!!",
+               expected,test_reg);
+
+`endif   // DISPLAY_TIME 
+
+`endif //COMPARE_FILE
+
+  end
+endtask
+

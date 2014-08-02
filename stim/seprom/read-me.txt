@@ -1,0 +1,44 @@
+ REV 1.1 version according to Datasheet M25P40 REV 2.0 (November 2003)
+
+
+ WARNING : These Verilog models are provided "as is" without warranty of any kind, including, but not
+ limited to, any implied warranty of merchantability and fitness for a particular purpose.
+ 
+ 
+ 
+ 
+ ======================================== PROJECT ARCHITECTURE ================================================
+ 
+ Parameter.v
+ |
+ TestBench.v
+ |--------------> M25Pxx.v
+ |                |--------------> memory_access.v
+ |                |--------------> internal_logic.v
+ |                |--------------> acdc_check.v
+ |                |--------------> parameter.v
+ |
+ |--------------> M25Pxx_driver.v
+ 
+ 
+ The project should be compiled in the following order :
+ 
+    - parameter.v          : defines all constants.
+    - memory_access.v      : performs read/write operations.
+    - internal_logic.v     : simulates the internal logic.
+    - acdc_check.v         : checks if received timings are within specified limits.
+    - m25pxx.v             : external description of Serial Flash.
+    - m25pxx_driver.v      : stimuli + library of operations example.
+    - testbench.v          : a testbench example.
+ 
+
+
+======================================== TECHNICAL SUPPORT ====================================================
+ For current information on M25Pxx products, please consult our pages on the world wide web:
+
+           www.st.com ("memories", then "Serial NVM")
+ 
+ For any questions or suggestions concerning the matters raised in this document, please send your request 
+ to the following electronic mail addresses:
+           apps.serial-flash@st.com (for Serial Flash support)
+           ask.memory@st.com (for general enquiries)

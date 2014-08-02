@@ -1,0 +1,143 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+// 
+//  This program is free software; you can redistribute it and/or modify it 
+//  under the terms of the GNU General Public License as published by the Free 
+//  Software Foundation; either version 3 of the License, or (at your option) 
+//  any later version.
+//
+//  This program is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+//  or FITNESS FOR A PARTICULAR PURPOSE. 
+//  See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along with
+//  this program; if not, see <http://www.gnu.org/licenses>.
+//
+//  This code is available under licenses for commercial use. Please contact
+//  Francis Bruno for more information.
+//
+//  http://www.gplgpu.com
+//  http://www.asicsolutions.com
+//
+//  Title       :  
+//  File        :  
+//  Author      :  Jim MacLeod
+//  Created     :  14-May-2011
+//  RCS File    :  $Source:$
+//  Status      :  $Id:$
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Description : 
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Modules Instantiated:
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Modification History:
+//
+//  $Log:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+task bb_reset;  //similar to initialize task , but allows to change 
+                // configuration during simulation using second  set of defalut
+                //  values. Another way would be to set config[31:0] to
+                //  a value and to toggle config_en (active low) and RESET line,
+                // or after seting config[31:0](or temp_config[31:0] either will
+                // work ) to run initialize or bb_reset with input different
+                // than zero.  It was a pain to to set config[76:0], but now it
+                // only 16 bits + vendor ID(16bits too)  , still it may be
+                // more convenient to have a second set ready.   
+                // For test vectors one can define different setting for
+                // different vectors blocks.  
+
+
+                //THIS TASK DOES NOT CHANGE PCI BASE etc. as in "initialize"
+                // so "pci_base" TASK HAS TO BE RUN IMMEDIATELY AFTER.  
+
+input	[31:0]		con_string;
+
+
+begin
+
+  	`ifdef TV //- always in test vector environment
+		@(negedge TEST_STROBE) RSTn = 0;
+  	`else
+  	  	#0	RSTn = 0;
+  	`endif
+
+	if(con_string == 0) // Default settings
+	  begin	
+          set_config(PULLUP, 0   );   /* Pullup all config. jumpers   */
+                                        /* this will also select sub.vendor ID*/
+                                        /* and set sub.vendor ID to 16'hffff  */
+                                        /* and set subs. ID to 16'h003f       */
+          `ifdef SGRAM
+            set_config(SGRAM,1);        /*  SGRAM ENABLED  */
+            set_config(VDEN,M_256K);    /* memory density is 256K by n.   */
+            `ifdef SGR16M
+              set_config(VDEN,M_16M);   /* memory is SGRAM 16Mbit chips  */
+            `endif
+            `ifdef SDR16M
+              set_config(VDEN,2'b11);   /* memory is SGRAM 16Mbit chips  */
+            `endif
+          `else
+            set_config(SGRAM,0);        /* sgram controller off,WINRAM ON */
+            set_config(VDEN,M_256K);    /* memory density is 256K by n.   */
+            `ifdef WINRAM_INT
+              set_config(VDEN,M_WI);    /* memory density is 256K interleaved */
+            `endif
+          `endif
+ 
+            set_config(IDAC,0);
+          `ifdef IDAC
+            set_config(IDAC,1);
+          `endif
+ 
+            set_config(BASE0_1, B_4M);  /* Base 0 and 1 are 4 megabytes */
+ 
+ 
+          `ifdef AGP_EN
+            set_config(HBT,AGP_CONFIG); /* Host bus type is AGP.        */
+          `else
+            set_config(HBT,PCI_CONFIG); /* Host bus type is PCI.        */
+          `endif
+ 
+ 
+            set_config(CLASS,PCI_OTHR); /* PCI device class is other.   */
+          `ifdef VGA
+            set_config(CLASS,PCI_VGA);  /* PCI device class is VGA      */
+          `endif
+ 
+            set_config(EE, PROM);       /* EPROM enabled.               */
+ 
+	  end
+
+
+	hb_ad_bus = 32'hz;
+	config_reg = temp_config;
+
+        #(4*hclk) config_en = 1'b0;
+
+	#(4*hclk);
+
+  	`ifdef TV
+		@(negedge TEST_STROBE) RSTn = 1;
+  	`else
+  		#0	RSTn = 1;
+  	`endif
+
+	#(4*hclk);
+	config_en = 1'b1;
+
+
+       @ (posedge HCLK) #(Thld) ;	// Line up simulation to Thld after HCLK
+
+   end
+ endtask
+

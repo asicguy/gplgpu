@@ -1,0 +1,755 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2014 Francis Bruno, All Rights Reserved
+// 
+//  This program is free software; you can redistribute it and/or modify it 
+//  under the terms of the GNU General Public License as published by the Free 
+//  Software Foundation; either version 3 of the License, or (at your option) 
+//  any later version.
+//
+//  This program is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+//  or FITNESS FOR A PARTICULAR PURPOSE. 
+//  See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License along with
+//  this program; if not, see <http://www.gnu.org/licenses>.
+//
+//  This code is available under licenses for commercial use. Please contact
+//  Francis Bruno for more information.
+//
+//  http://www.gplgpu.com
+//  http://www.asicsolutions.com
+//
+//  Title       :  
+//  File        :  
+//  Author      :  Jim MacLeod
+//  Created     :  14-May-2011
+//  RCS File    :  $Source:$
+//  Status      :  $Id:$
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Description : 
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Modules Instantiated:
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Modification History:
+//
+//  $Log:$
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+task Verify;
+ input [31:0] address;
+ input [7:0]  size;
+ input [31:0] data;
+
+ begin
+  $display("VERIFY ADDRESS  %h Size %h", address, size);
+  $display("VERIFY EXPECTED %h", data);
+  rd(MEM_RD, address, 1);
+  $display("VERIFY DATA     %h", test_reg);
+ end
+endtask
+
+
+task Verify_Io;
+ input [31:0] address;
+ input [7:0]  size;
+ input [31:0] data;
+
+ integer long_addr;
+ integer byte_enables;
+
+ begin
+  long_addr = address & 32'hFFFFFFFC;
+  byte_enables = (1 << size) - 1;
+  byte_enables = byte_enables << (address & 3);
+  $display("VERIFY ADDRESS  %h Size %h", address, size);
+  $display("VERIFY EXPECTED %h", data);
+  rd_byte(IO_RD, address, ~byte_enables, 1);
+ 
+  data = (test_reg >> (address & 3)) & ((1 << size) - 1);
+  $display("VERIFY DATA     %h", data);
+ end
+endtask
+
+/*
+task Verify_Burst;
+ input [31:0] address;
+ input [29:0] NO_OF_BEATS; //number of beats in one burst cycle (max= 8 beats)
+ input [31:0] data1;
+ input [31:0] data2;
+ input [31:0] data3;
+ input [31:0] data4;
+ input [31:0] data5;
+ input [31:0] data6;
+ input [31:0] data7;
+ input [31:0] data8;
+
+ begin
+  $display("VERIFY ADDRESS  %h   4", address);
+  $display("VERIFY EXPECTED %h", data1);
+  $display("VERIFY EXPECTED %h", data2);
+  $display("VERIFY EXPECTED %h", data3);
+  $display("VERIFY EXPECTED %h", data4);
+  $display("VERIFY EXPECTED %h", data5);
+  $display("VERIFY EXPECTED %h", data6);
+  $display("VERIFY EXPECTED %h", data7);
+  $display("VERIFY EXPECTED %h", data8);
+  verify_rd(MEM_RD, address, NO_OF_BEATS);
+ end
+endtask
+
+
+
+
+
+//*************************************************************************************************
+//*** TASK TO IMPLEMENT BLACKBIRD BYTE,WORD, & DOUBLE WORD READS (CONFIGURATION, IO, MEM, etc...)**
+//***NOTE: THIS TASK SUPPORTS BOTH SINGLE & BURST READS.                                         **
+//*************************************************************************************************
+ task verify_rd;
+ 
+ input [3:0]  host_cycle_type;
+ input [31:0] address;
+ input [29:0] NO_OF_BEATS; //number of beats in one burst cycle (max= 1G beats)
+
+ integer index_prdy_timer;
+ integer index_beat_timer;
+ integer index_beat_count;
+
+ reg rd_flag;
+
+ reg [1:0] PRDY_TIMER; 
+
+ begin
+ 
+  `ifdef RAND
+	PRDY_TIMER= $random;
+ `else
+ `ifdef PRDY3
+	PRDY_TIMER= 3;
+ `else
+ `ifdef PRDY2
+	PRDY_TIMER= 2;
+ `else
+ `ifdef PRDY1
+	PRDY_TIMER= 1;
+ `else
+	PRDY_TIMER= 0;
+ `endif
+ `endif
+ `endif
+ `endif
+
+$display( "task verify_rd ?????");
+$stop;
+ 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// *** address phase. Present address ,assert FRAMEn signal &
+//      check if cyle type is configuration *****
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+   if (host_cycle_type[0]==1)
+            begin
+                $display("ERROR!!!!. PCI WRITE COMMAND IS BEING USED IN A READ TASK AT ADDR=%h", address); 
+                $stop;
+            end
+ 
+   else if (host_cycle_type==CONFIG_RD) //cycle is configuration, thus assert IDSEL PIN
+         begin
+           #(hclk-Tsu-Thld)
+                    hb_ad_bus        = address;
+                    framee_n           = 0;
+                    prdyy_n            = 1;
+                    IDSEL            = 1;
+                    byte_ens[3:0]       = host_cycle_type[3:0];
+                    rd_flag             = 1;
+          end
+ 
+   else
+
+         begin
+           #(hclk-Tsu-Thld)
+                    hb_ad_bus         = address;
+                    framee_n           = 0;
+                    prdyy_n            = 1;
+                    IDSEL           = 0;
+                    byte_ens[3:0]  = host_cycle_type[3:0];
+                    rd_flag             = 1;
+         end
+ 
+ 
+
+ 
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// CHECK IF CYCLE IS SINGLE TRANSFER OR BURST
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  @ (posedge HCLK)
+   if (NO_OF_BEATS==1 && PRDY_TIMER==0)
+ 
+/****************  SINGLE READ TRANSFER CYCLES , NO PRDY WAIT *****************/
+   begin
+ 
+       #(Thld) fork
+                  hb_ad_bus       = 32'hz;
+                  byte_ens[3:0]      = 32'hz;
+                  IDSEL           = 0;
+                  framee_n          = 1;
+               join
+ 
+
+      @ (posedge HCLK)
+          @ (posedge HCLK)
+           begin
+           if (DEVSELn!==0)
+             begin
+               #(Thld)  
+                         rd_flag = 0;
+                         $display ("NO DEVSEL RESPONSE !! READ  CYCLE ADDR=%h at TIME=", address, $time);
+             end
+
+         
+          else
+             begin
+               #(hclk-Tsu)  fork
+                             prdyy_n      = 0;
+                             byte_ens[3:0] = 4'h0; //enable all bytes
+                            join
+             end
+           end
+ 
+        @ (posedge HCLK)
+         begin
+          if (rd_flag==0)
+            begin
+              #(Thld)  fork
+                         prdyy_n        = 1;
+                         byte_ens[3:0]   = 32'hz;
+                       join
+             end
+                
+
+            else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0)
+              begin
+              #(Thld) prdyy_n        = 1;
+                      byte_ens[3:0]   = 32'hz;
+		     $display("VERIFY DATA     %h", AD);
+		     test_reg        =AD;
+              end
+ 
+
+            else if (DEVSELn== 0 && TRDYn==1 && STOPn ==0) /* TARGET ISSUED STOP */
+              begin
+              #(Thld) fork
+                       prdyy_n        = 1;
+                       byte_ens[3:0]   = 32'hz;
+                       $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                      join
+              end
+
+            else
+                for (index_beat_timer=1; index_beat_timer <= DOG_TIMER; index_beat_timer = index_beat_timer+1 )
+                       begin
+                           @ (posedge HCLK)
+                             if (TRDYn==0 && PRDYn==0)
+                                #(Thld) fork
+                                          prdyy_n            = 1;
+                                          byte_ens[3:0]       = 32'hz;
+                                          index_beat_timer = DOG_TIMER;
+					$display("VERIFY DATA     %h", AD);
+					test_reg        =AD;
+                                        join
+
+                             else if (DEVSELn== 0 && TRDYn==1 && STOPn ==0) /* TARGET ISSUED STOP */
+                                #(Thld) fork
+                                         prdyy_n        = 1;
+                                         byte_ens[3:0]   = 32'hz;
+                                         index_beat_timer = DOG_TIMER;
+                                         $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                        join
+                                          
+                              else if (index_beat_timer== DOG_TIMER)
+                                #(Thld) fork
+                                          prdyy_n         = 1;
+                                          byte_ens[3:0]    = 32'hz;
+                                          $display ("NO BLK TRDY RESPONSE. READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                         join
+
+                       end
+     end
+   end
+               
+
+
+/****************  SINGLE READ TRANSFER CYCLES ,  PRDY WAIT *****************/
+ 
+   else if (NO_OF_BEATS==1 && PRDY_TIMER!==0)
+ 
+   begin
+ 
+ 
+       #(Thld) fork
+                  hb_ad_bus       = 32'hz;
+                  byte_ens[3:0]      = 32'hz;
+                  IDSEL           = 0;
+                  framee_n          = 1;
+               join
+
+         @ (posedge HCLK)
+           @ (posedge HCLK)
+             if (DEVSELn!==0)
+               begin
+                #(Thld) 
+                         $display ("NO DEVSEL RESPONSE !! READ  CYCLE ADDR=%h at TIME=", address, $time);
+               end
+
+             else 
+              begin
+                   for (index_prdy_timer=1; index_prdy_timer <= PRDY_TIMER; index_prdy_timer = index_prdy_timer+1)
+                    @ (posedge HCLK)
+                       begin
+                         if (index_prdy_timer==PRDY_TIMER)
+                            #(hclk-Tsu) fork
+                                            prdyy_n      = 0;
+                                            byte_ens[3:0] = 4'h0; //enable all bytes
+                                          join
+                       end
+
+
+                   @ (posedge HCLK)
+                      if (DEVSELn== 0 && TRDYn==0 && PRDYn==0)
+                               begin
+                                #(Thld) fork
+                                          prdyy_n            = 1;
+                                          byte_ens[3:0]       = 32'hz;
+				      $display("VERIFY DATA     %h", AD);
+				      test_reg        =AD;
+                                        join
+                                end
+ 
+                     else if (DEVSELn== 0 && TRDYn==1 && STOPn ==0) /* TARGET ISSUED STOP */
+                                #(Thld) fork
+                                          prdyy_n            = 1;
+                                          byte_ens[3:0]       = 32'hz;
+                                          $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                         join
+                     
+                     else
+ 
+                       for (index_beat_timer=1; index_beat_timer <= DOG_TIMER; index_beat_timer = index_beat_timer+1 )
+                         begin
+                           @ (posedge HCLK)
+                             if (DEVSELn== 0 && TRDYn==0 && PRDYn==0)
+                               begin
+                                #(Thld) fork
+                                          prdyy_n            = 1;
+                                          byte_ens[3:0]       = 32'hz;
+                                          index_beat_timer = DOG_TIMER;
+				      $display("VERIFY DATA     %h", AD);
+				      test_reg        =AD;
+                                        join
+                                end
+ 
+                             else if (DEVSELn== 0 && TRDYn==1 && STOPn ==0) /* TARGET ISSUED STOP */
+                                #(Thld) fork
+                                          prdyy_n            = 1;
+                                          byte_ens[3:0]       = 32'hz;
+                                          index_beat_timer = DOG_TIMER;
+                                          $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                         join
+
+                              else if (index_beat_timer== DOG_TIMER)
+                                #(Thld) fork
+                                          prdyy_n         = 1;
+                                          byte_ens[3:0]    = 32'hz;
+                                          $display ("NO BLK TRDY RESPONSE. READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                         join
+                        end
+              end
+
+    end
+
+
+ 
+/****************  BURST READ TRANSFER CYCLES , NO PRDY WAIT *****************/
+
+ else if (NO_OF_BEATS!==1 && PRDY_TIMER==0)
+   begin
+ 
+       #(Thld) fork
+                  hb_ad_bus       = 32'hz;
+                  byte_ens[3:0]      = 32'hz;
+                  IDSEL           = 0;
+               join
+ 
+      @ (posedge HCLK)
+             @ (posedge HCLK)
+              begin
+                if (DEVSELn!==0)
+                  begin
+                    #(Thld) fork
+                              rd_flag = 0;
+                              framee_n  = 1;
+                              $display ("NO DEVSEL RESPONSE !! READ  CYCLE ADDR=%h at TIME=", address, $time);
+                            join
+
+                         #(hclk-Tsu-Thld)  fork
+                                  prdyy_n      = 0;
+                                  byte_ens[3:0] = 4'h0; //enable all bytes
+                                 join
+                  end
+    
+    
+               else
+                  begin
+                    #(hclk-Tsu)  fork
+                                  prdyy_n      = 0;
+                                  byte_ens[3:0] = 4'h0; //enable all bytes
+                                 join
+                  end
+              end
+
+           for (index_beat_count=1; index_beat_count <= NO_OF_BEATS; index_beat_count = index_beat_count+1 )
+             begin
+                 @ (posedge HCLK)
+                   if (rd_flag==0)
+                     begin
+                        #(Thld)  fork
+                                   framee_n        = 1;
+                                   hb_ad_bus     = 32'hz;
+                                   byte_ens[3:0]    = 32'hz;
+                                   prdyy_n         = 1;
+                                   index_beat_count = NO_OF_BEATS;
+                                 join
+                     end
+
+                   else if (DEVSELn== 0 && TRDYn==1 && PRDYn==0 && STOPn==0) /*TARGET ISSUED STOP */
+                     begin
+                      #(Thld) framee_n       = 1;
+ 
+                      @ (posedge HCLK)
+                       #(Thld)    fork
+                             prdyy_n        = 1;
+                             byte_ens[3:0]   = 32'hz;
+                             index_beat_count = NO_OF_BEATS;
+                             $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                           join
+                     end
+
+
+                   else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0 && index_beat_count == NO_OF_BEATS-1) /* BEAT BEFORE LAST */
+                     begin
+                      #(Thld)  framee_n       = 1;
+		      $display("VERIFY DATA     %h", AD);
+		      test_reg        =AD;
+
+                     end
+
+                    else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0 && index_beat_count==NO_OF_BEATS)
+                     begin
+                      #(Thld) fork
+                               prdyy_n      = 1;
+                               byte_ens[3:0] = 4'hz;
+			      $display("VERIFY DATA     %h", AD);
+			      test_reg        =AD;
+                              join
+                     end
+
+                     else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0 && index_beat_count!==NO_OF_BEATS)
+                     begin
+                      #(Thld) 
+		      $display("VERIFY DATA     %h", AD);
+		      test_reg        =AD;
+
+                     end
+
+
+                  else /* TARGET HAS'NT PULLED TRDY YET */
+                    for (index_beat_timer=1; index_beat_timer <= DOG_TIMER; index_beat_timer = index_beat_timer+1 )
+                     begin
+                      @ (posedge HCLK)
+                         if (DEVSELn== 0 && TRDYn==1 && PRDYn==0 && STOPn==0) /*TARGET ISSUED STOP */
+                               begin
+                                 #(Thld) framee_n       = 1;
+ 
+                                 @ (posedge HCLK)
+                                  #(Thld)
+                                      fork
+                                        prdyy_n        = 1;
+                                        byte_ens[3:0]   = 32'hz;
+                                        index_beat_timer= DOG_TIMER;
+                                        index_beat_count = NO_OF_BEATS;
+                                        $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                      join
+                                end
+
+                        else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0 && index_beat_count ==NO_OF_BEATS-1) 
+                              begin
+                                #(Thld) fork
+                                         framee_n       = 1;
+                                         index_beat_timer= DOG_TIMER;
+				      $display("VERIFY DATA     %h", AD);
+				      test_reg        =AD;
+
+                                        join
+                              end
+ 
+ 
+                        else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0 && index_beat_count==NO_OF_BEATS)
+                             begin
+                              #(Thld) fork
+                                       prdyy_n      = 1;
+                                       byte_ens[3:0] = 4'hz;
+                                       index_beat_timer= DOG_TIMER;
+				      $display("VERIFY DATA     %h", AD);
+				      test_reg        =AD;
+
+                                      join
+                             end
+
+                         else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0 && index_beat_count!==NO_OF_BEATS)
+                             begin
+                              #(Thld) 
+			      index_beat_timer= DOG_TIMER;
+			      $display("VERIFY DATA     %h", AD);
+			      test_reg        =AD;
+
+                             end
+
+
+                        else if (index_beat_timer== DOG_TIMER)
+                               begin
+                                #(Thld) framee_n       = 1;
+ 
+                                   @ (posedge HCLK)
+                                      #(Thld) fork
+                                             hb_ad_bus     = 32'hz;
+                                             prdyy_n         = 1;
+                                             byte_ens[3:0]    = 4'hz;
+                                             index_beat_count = NO_OF_BEATS;
+                                          $display ("NO BLK TRDY RESPONSE. READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                             join
+                                end
+
+                         else if (DEVSELn !==0)
+                               begin
+                                #(Thld) framee_n       = 1;
+                                   @ (posedge HCLK)
+ 
+                                      #(Thld) fork
+                                          hb_ad_bus     = 32'hz;
+                                          prdyy_n         = 1;
+                                          byte_ens[3:0]    = 4'hz;
+                                          index_beat_timer= DOG_TIMER;
+                                          index_beat_count = NO_OF_BEATS;
+                            $display ("DEVSEL WAS DEASSERTED PREMATURLY. READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                        join
+                               end
+
+                     end
+                end
+       end
+ 
+
+
+
+/****************  BURST READ TRANSFER CYCLES , PRDY WAIT *****************/
+ 
+ else if (NO_OF_BEATS!==1 && PRDY_TIMER!==0)
+   begin
+ 
+       #(Thld) fork
+                  hb_ad_bus       = 32'hz;
+                  byte_ens[3:0]      = 32'hz;
+                  IDSEL           = 0;
+               join
+ 
+        @ (posedge HCLK)
+                 for (index_beat_count=1; index_beat_count <= NO_OF_BEATS; index_beat_count = index_beat_count+1 )
+                   begin
+
+                     for (index_prdy_timer=1; index_prdy_timer <= PRDY_TIMER; index_prdy_timer = index_prdy_timer+1)
+                      begin
+                        @ (posedge HCLK)
+                          if (DEVSELn!==0)
+                                begin
+                                 #(Thld) fork
+                                        rd_flag = 0;
+                                        framee_n  = 1;
+                                        index_prdy_timer = PRDY_TIMER;
+                                        index_beat_count = NO_OF_BEATS;
+                                        $display ("NO DEVSEL RESPONSE !! READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                      join
+ 
+                               #(hclk-Tsu-Thld)
+                                        fork
+                                          prdyy_n      = 0;
+                                          byte_ens[3:0] = 4'h0; //enable all bytes
+                                        join
+                                end
+
+                        else if (index_prdy_timer== PRDY_TIMER && DEVSELn== 0 && TRDYn==1 && STOPn==0)
+                                begin
+                                     #(Thld) framee_n    = 1;
+                                       #(hclk-Tsu-Thld)
+                                         fork
+                                           rd_flag    = 0;
+                                           prdyy_n      = 0;
+                                           byte_ens[3:0] = 4'h0 ;
+                                           index_prdy_timer = PRDY_TIMER;
+                                           index_beat_count = NO_OF_BEATS;
+                                           $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                         join
+                                end
+
+
+                        else if (index_prdy_timer== PRDY_TIMER && index_beat_count!== NO_OF_BEATS)
+                                begin
+                                     #(hclk-Tsu)  fork
+                                                    prdyy_n      = 0;
+                                                    byte_ens[3:0] = 4'h0 ;
+                                                  join
+                                end
+
+                        else if (index_prdy_timer== PRDY_TIMER && index_beat_count== NO_OF_BEATS)
+                                begin
+                                      #(Thld) framee_n       = 1;
+                                        #(hclk-Tsu-Thld) fork
+                                                           prdyy_n      = 0;
+                                                           byte_ens[3:0] = 4'h0 ;
+                                                         join
+                                end
+
+                         end
+
+
+                 @ (posedge HCLK)
+                  if (rd_flag==0)
+                     begin
+                         #(Thld) fork
+                                   prdyy_n        = 1;
+                                   framee_n       = 1;
+                                   hb_ad_bus    = 32'hz;
+                                   byte_ens[3:0]   = 32'hz;
+                                  join
+                     end
+
+                  else if (DEVSELn== 0 && TRDYn==0 && PRDYn==0)
+                    begin
+                      #(Thld) fork
+                               hb_ad_bus    = 32'hz;
+                               byte_ens[3:0]   = 32'hz;
+                               prdyy_n        = 1;
+			      $display("VERIFY DATA     %h", AD);
+			      test_reg        =AD;
+                              join
+                    end
+
+                  else if (DEVSELn== 0 && TRDYn==1 && STOPn==0) //traget issued stop
+                    begin
+                     #(Thld) framee_n    = 1;
+                              #(hclk-Tsu-Thld)
+                                       fork
+                                         prdyy_n      = 0;
+                                         byte_ens[3:0] = 4'h0 ;
+                                         index_beat_count = NO_OF_BEATS;
+                                         $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                       join
+
+                               @ (posedge HCLK) 
+                                                  #(Thld) fork
+                                                            prdyy_n        = 1;
+                                                            framee_n       = 1;
+                                                            hb_ad_bus    = 32'hz;
+                                                            byte_ens[3:0]   = 32'hz;
+                                                          join
+                    end
+ 
+
+ 
+                  else /* TARGET HAS'NT PULLED TRDY YET */
+                    for (index_beat_timer=1; index_beat_timer <= DOG_TIMER; index_beat_timer = index_beat_timer+1 )
+                       begin
+                         @ (posedge HCLK)
+                           if (DEVSELn== 0 && TRDYn==0 && PRDYn==0)
+                              begin
+                               #(Thld) fork
+                                        byte_ens[3:0]   = 32'hz;
+                                        prdyy_n        = 1;
+                                        index_beat_timer= DOG_TIMER;
+				      $display("VERIFY DATA     %h", AD);
+				      test_reg        =AD;
+                                       join
+                              end
+
+                            else if (DEVSELn== 0 && TRDYn==1 && STOPn==0)//target issued stop
+                                begin
+                                     #(Thld) framee_n    = 1;
+                                       #(hclk-Tsu-Thld)
+                                         fork
+                                           prdyy_n      = 0;
+                                           byte_ens[3:0] = 4'h0 ;
+                                           index_prdy_timer = PRDY_TIMER;
+                                           index_beat_count = NO_OF_BEATS;
+                                           $display ("BLK ISSUED STOP.      READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                         join
+
+                               @ (posedge HCLK) 
+                                                  #(Thld) fork
+                                                            prdyy_n        = 1;
+                                                            framee_n       = 1;
+                                                            hb_ad_bus    = 32'hz;
+                                                            byte_ens[3:0]   = 32'hz;
+                                                           join
+                                end
+ 
+
+ 
+                            else if (index_beat_timer== DOG_TIMER)
+                              begin
+                                #(Thld) framee_n       = 1;
+ 
+                                  @ (posedge HCLK)
+                                    #(Thld)
+                                       fork
+                                         prdyy_n         = 1;
+                                         byte_ens[3:0]    = 4'hz;
+                                         index_beat_count = NO_OF_BEATS;
+                                         index_beat_timer = DOG_TIMER;
+                                         index_prdy_timer = PRDY_TIMER;
+                                         $display ("NO BLK TRDY RESPONSE. WRITE CYCLE ADDR=%h at TIME=", address, $time);
+                                       join
+                               end
+ 
+                           else if (DEVSELn !==0)
+                             begin
+                                #(Thld) framee_n       = 1;
+                                   @ (posedge HCLK)
+ 
+                                     #(Thld)
+                                        fork
+                                          prdyy_n         = 1;
+                                          byte_ens[3:0]    = 4'hz;
+                                          index_beat_timer= DOG_TIMER;
+                                          index_beat_count= NO_OF_BEATS;
+                                          index_prdy_timer = PRDY_TIMER;
+                               $display ("DEVSEL WAS DEASSERTED PREMATURLY. READ  CYCLE ADDR=%h at TIME=", address, $time);
+                                        join
+                             end
+                       end
+           end
+
+ end
+
+ 
+end
+endtask
+*/

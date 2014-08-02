@@ -1,0 +1,451 @@
+%!PS-Adobe-1.0
+%%Creator: Steve Holden
+%%Modified: John Macdonald
+%%Title: @(#)mp.pro.ps 2.15 91/09/14
+%%CreationDate: see above
+%%PageLength 60
+%%LineLength 80
+%%DocumentFonts: Times-Bold Times-Roman Courier
+%%Pages: (atend)
+%%EndComments
+
+/inch { 72 mul } bind def
+%
+%  IMPORTANT NOTE: The following two variables should be set correctly.
+%                  Reasonable values for fullwidth and fullheight are
+%                  8.5/11 inch for US Letter, and 8.5/11.4 inch for A4.
+%                  Since sites usually have one single format of paper,
+%                  mp should be installed with either the USLetter or A4
+%                  values.
+%
+/fullwidth 8.5 inch def
+/fullheight 11 inch def
+
+%Title: backspacefont.ps suggested by Glenn Reid (Adobe Systems).
+
+/backspacefont {
+    /Courier findfont dup length dict begin
+        { %forall
+            1 index /FID eq { pop pop } { def } ifelse
+        } forall
+        currentdict /UniqueID known { %if
+              /UniqueID UniqueID 16#800000 xor def
+        } if
+        CharStrings length 1 add dict begin
+            CharStrings { def } forall
+          /backspace { -600 0 setcharwidth } bind def
+            currentdict
+      end
+        /CharStrings exch def
+        /Encoding Encoding 256 array copy def
+        Encoding 8 /backspace put
+        currentdict
+    end
+    definefont
+} bind def
+
+/setmargin {
+  /leftedge 0 def
+  /bottomedge 0 def
+  fullheight fullwidth LandscapeMode { exch } if
+    /rightedge exch def
+    /topedge exch def
+  9 7 LandscapeMode { exch } if pop
+    /FontSize exch def
+
+  /CourierBack backspacefont
+  
+  /font1d /Times-Bold            findfont def
+  /font2d /Times-Roman           findfont def
+  /font3d /CourierBack           findfont def
+  /fontHd /Helvetica-BoldOblique findfont 14 scalefont def
+  /fontH2 /Helvetica-BoldOblique findfont 10 scalefont def
+  /fontNd /Times-Bold            findfont 12 scalefont def
+  
+  /BoldFont      { font1d FontSize scalefont setfont } bind def
+  /pf            { font2d FontSize scalefont setfont } bind def
+  /sf            { font3d FontSize scalefont setfont } bind def
+  /fontH         { fontHd setfont } bind def
+  /fontD         { fontH2 setfont } bind def
+  /fontN         { fontNd setfont } bind def
+} def
+
+/graybox	% grey x1 y1 x2 y2 graybox --
+{
+    newpath
+      4 -1 roll 2 copy			% y2 x1
+      10 sub exch moveto
+      4 -1 roll 2 copy			% x1 y1
+      10 180 270 arc
+      4 -1 roll 1 copy 3 -1 roll	% x2 y1
+      10 270 0 arc
+      3 -1 roll 1 copy 3 1 roll		% x1 y2 x2 y2
+      10 0 90 arc
+      10 90 180 arc
+    closepath
+    gsave
+      setgray fill
+    grestore
+    0 setgray stroke
+} def
+
+/endpage		% page_number endpage --
+{
+  gsave
+    % listing type, user, date across the bottom
+    0.88                                % gray level
+    leftedge  50 add topedge 56 sub     % bottom lt corner
+    rightedge 95 sub topedge 36 sub     % top rt corner
+    graybox
+    leftedge 50 add topedge 50 sub moveto
+    fontD
+    MailFor show
+    fontH
+    User show
+    fontD
+    rightedge 95 sub TimeNow stringwidth pop sub
+    topedge 52 sub moveto TimeNow show
+    % page number to the bottom right corner
+    1                                   % gray level
+    rightedge 70 sub topedge 56 sub     % bottom lt
+    rightedge 50 sub topedge 36 sub     % top rt
+    graybox
+    fontD
+    (Page) dup stringwidth
+       topedge 40 sub exch sub                  % y-centered
+       exch 2 div rightedge 60 sub exch sub     % x-centered
+       exch moveto show
+    fontH
+    dup stringwidth
+       topedge 58 sub exch sub                  % y-centered
+       exch 2 div rightedge 60 sub exch sub     % x-centered
+       exch moveto show
+    0.88                                   % gray level
+    leftedge  50 add bottomedge 50 add     % bottom lt corner
+    rightedge 50 sub bottomedge 70 add     % top rt corner
+    graybox
+    fontH
+    % compute x pos for centring
+      % ((l+50) + (r-50)) / 2 is the page centre
+      leftedge rightedge add 2 div
+      % but we want to start at the beginning of the string, not the middle
+      Subject stringwidth pop 2 div sub
+    % y pos is simple
+      bottomedge 54 add
+      moveto
+    Subject show
+  grestore
+  PageSave restore      % restore *always* before showpage
+  showpage		% display it
+} def
+
+/endcol			% page_number col_number endcol --
+{
+  pop			% get rid of col_number
+  pop                   % get rid of page_number
+  /ypos topedge 92 sub def
+  /xpos rightedge leftedge sub 2 div def
+  xpos ypos moveto
+} def
+
+/newpage	% page_number newpage --
+{
+  pop		% pageno
+  /PageSave save def
+  LandscapeMode {setlandscape} if
+  /lct 0 def
+  /ypos topedge 92 sub def
+  /xpos leftedge 50 add def
+  xpos ypos moveto
+  sf
+} def
+
+/setlandscape
+{
+  612 0 translate
+  90 rotate
+} def
+
+/showline
+{
+  show
+  /ypos ypos FontSize sub def
+  xpos ypos moveto
+} def
+
+106 45 {dup mul exch dup mul add 1.0 exch sub} setscreen
+
+/LandscapeMode false def
+
+setmargin
+%%EndProlog
+%%Page: ? 1
+(1) newpage
+/MailFor (Listing for ) def
+/User (Naser) def
+/TimeNow (Wed Aug 23 11:09:47 1995) def
+/Subject (YUV_LUT_VERIFY_TEST) def
+sf (/******************************************************************************/) showline
+sf (//              TASK TO VERIFY THE DATA INTEGRITY OF THE LUT TABLES) showline
+sf (/******************************************************************************/) showline
+sf (task yuv_lut_verify;) showline
+sf () showline
+sf ( integer i; //loop counter) showline
+sf () showline
+sf ( real temp_u0, temp_u1;) showline
+sf ( real temp_v0, temp_v1;) showline
+sf ( reg [9:0] U00, U10;) showline
+sf ( reg [9:0] V00, V10;) showline
+sf ( reg [9:0] temp_u00, temp_u10;) showline
+sf ( reg [9:0] temp_v00, temp_v10;) showline
+sf ( reg [9:0] U0, U1;) showline
+sf ( reg [9:0] V0, V1;) showline
+sf ( reg [7:0] fail_count0, fail_count1;) showline
+sf () showline
+sf ( begin) showline
+sf () showline
+sf ( fail_count0= 0; //initialize the fail count) showline
+sf ( fail_count1= 0; //initialize the fail count) showline
+sf () showline
+sf () showline
+sf (REV2_STIM.open_file\("hb_test_result/yuv_lut_verify.res"\);) showline
+sf ( ) showline
+sf ($fdisplay\(fname,"\\n*********************************"\);) showline
+sf ($fdisplay\(fname,"     BEGIN YUV_LUT_VERIFY TEST   "\);) showline
+sf ($fdisplay\(fname,"*********************************\\n"\);) showline
+sf () showline
+sf () showline
+sf () showline
+sf ($fdisplay\(fname,"\\n**************************************************"\);) showline
+sf ($fdisplay\(fname,"  TESTING THE INTEGRITY OF THE U LUT DATA VALUES"\);) showline
+sf ($fdisplay\(fname,"*************************************************\\n"\);) showline
+sf () showline
+sf (//testing the first half of the lut.) showline
+sf (for \(i=0; i<127; i=i+1\)) showline
+sf (  begin) showline
+sf (    mov_dw\(MEM_WR, rbase_w+8'h58, 32'h0000_0300+i, 4'h0, 1\);) showline
+sf (    rd \(MEM_RD, rbase_w+8'h5c, 1\);) showline
+sf ( ) showline
+sf ( temp_u0 = \(1.733*2*\('d128-i\)\);) showline
+sf ( U00=temp_u0;) showline
+sf ( U0 = \(~\(U00\)+1'b1\);) showline
+sf () showline
+sf ( temp_u1 = \(0.337*4*\('d128-i\)\);) showline
+sf ( U10= temp_u1;) showline
+sf ( U1 = \(~\(U10\) + 1'b1\);) showline
+sf ( ) showline
+sf (  begin) showline
+sf (   if \(test_reg[9:0]==U0\)) showline
+sf (       $fdisplay\(fname,"U0: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%) showline
+sf (h ACTUAL_DATA=%h", i, U0, test_reg[9:0]\);) showline
+sf (   else) showline
+sf (     begin) showline
+sf (       $fdisplay\(fname,"U0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%) showline
+sf (h ACTUAL_DATA=%h", i, U0, test_reg[9:0]\);) showline
+sf (       $fdisplay\(results,"U0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA) showline
+sf (=%h ACTUAL_DATA=%h", i, U0, test_reg[9:0]\);) showline
+sf (       fail_count0= fail_count0+1;) showline
+(1) 1 endcol
+(1) endpage
+%%Page: ? 2
+(2) newpage
+/MailFor (Listing for ) def
+/User (Naser) def
+/TimeNow (Wed Aug 23 11:09:47 1995) def
+/Subject (YUV_LUT_VERIFY_TEST) def
+sf (     end) showline
+sf (      end) showline
+sf ( ) showline
+sf (  begin) showline
+sf (  if \(test_reg[25:16]==U1\)) showline
+sf (     $fdisplay\(fname,"U1: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h\\n", i, U1, test_reg[25:16]\);) showline
+sf (  else) showline
+sf (   begin) showline
+sf (     $fdisplay\(fname,"U1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h\\n", i, U1, test_reg[25:16]\);) showline
+sf (     $fdisplay\(results,"U1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%) showline
+sf (h ACTUAL_DATA=%h\\n", i, U1, test_reg[25:16]\);) showline
+sf (     fail_count0= fail_count0+1;) showline
+sf (   end) showline
+sf (  end) showline
+sf ( end) showline
+sf ( ) showline
+sf () showline
+sf (//testing the second half of the lut.) showline
+sf (for \(i=128; i<256; i=i+1\)) showline
+sf (  begin) showline
+sf (    mov_dw\(MEM_WR, rbase_w+8'h58, 32'h0000_0300+i, 4'h0, 1\);) showline
+sf (    rd \(MEM_RD, rbase_w+8'h5c, 1\);) showline
+sf () showline
+sf ( temp_u0 = \(1.733*2*\(i-'d128\)\);) showline
+sf ( U0 = temp_u0;) showline
+sf () showline
+sf ( temp_u1 = \(0.337*4*\(i-'d128\)\);) showline
+sf ( U1= temp_u1;) showline
+sf () showline
+sf (   begin) showline
+sf (    if \(test_reg[9:0]==U0\)) showline
+sf (      $fdisplay\(fname,"U0: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h) showline
+sf ( ACTUAL_DATA=%h", i, U0, test_reg[9:0]\);) showline
+sf (     else) showline
+sf (      begin) showline
+sf (       $fdisplay\(fname,"U0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%) showline
+sf (h ACTUAL_DATA=%h", i, U0, test_reg[9:0]\);) showline
+sf (       $fdisplay\(results,"U0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA) showline
+sf (=%h ACTUAL_DATA=%h", i, U0, test_reg[9:0]\);) showline
+sf (       fail_count0= fail_count0+1;) showline
+sf (      end) showline
+sf (  end) showline
+sf () showline
+sf (  begin) showline
+sf (    if \(test_reg[25:16]==U1\)) showline
+sf (     $fdisplay\(fname,"U1: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h\\n", i, U1, test_reg[25:16]\);) showline
+sf (    else) showline
+sf (     begin) showline
+sf (      $fdisplay\(fname,"U1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%h) showline
+sf ( ACTUAL_DATA=%h\\n", i, U1, test_reg[25:16]\);) showline
+sf (      $fdisplay\(results,"U1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=) showline
+sf (%h ACTUAL_DATA=%h\\n", i, U1, test_reg[25:16]\);) showline
+sf (      fail_count0= fail_count0+1;) showline
+sf (     end) showline
+sf (  end) showline
+sf (    end) showline
+sf () showline
+sf () showline
+(2) 1 endcol
+(2) endpage
+%%Page: ? 3
+(3) newpage
+/MailFor (Listing for ) def
+/User (Naser) def
+/TimeNow (Wed Aug 23 11:09:47 1995) def
+/Subject (YUV_LUT_VERIFY_TEST) def
+sf ($fdisplay\(fname,"\\n**************************************************"\);) showline
+sf ($fdisplay\(fname,"\\nTESTING THE INTEGRITY OF THE V LUT DATA VALUES"\);) showline
+sf ($fdisplay\(fname,"*************************************************\\n"\);) showline
+sf ( ) showline
+sf (//testing the first half of the lut.) showline
+sf (for \(i=0; i<127; i=i+1\)) showline
+sf (  begin) showline
+sf (    mov_dw\(MEM_WR, rbase_w+8'h58, 32'h0000_0100+i, 4'h0, 1\);) showline
+sf (    rd \(MEM_RD, rbase_w+8'h5c, 1\);) showline
+sf ( ) showline
+sf ( temp_v0 = \(1.371*2*\('d128-i\)\);) showline
+sf ( V00=temp_v0;) showline
+sf ( V0 = \(~\(V00\)+1'b1\);) showline
+sf ( ) showline
+sf ( temp_v1 = \(0.698*4*\('d128-i\)\);) showline
+sf ( V10=temp_v1;) showline
+sf ( V1 = \(~\(V10\)+1'b1\);) showline
+sf () showline
+sf (   begin) showline
+sf (    if \(test_reg[9:0]==V0\)) showline
+sf (     $fdisplay\(fname,"V0: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h", i, V0, test_reg[9:0]\);) showline
+sf (    else) showline
+sf (     begin) showline
+sf (      $fdisplay\(fname,"V0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%h) showline
+sf ( ACTUAL_DATA=%h", i, V0, test_reg[9:0]\);) showline
+sf (      $fdisplay\(results,"V0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=) showline
+sf (%h ACTUAL_DATA=%h", i, V0, test_reg[9:0]\);) showline
+sf (      fail_count1= fail_count1+1;) showline
+sf (     end) showline
+sf (   end) showline
+sf ( ) showline
+sf (   begin) showline
+sf (   if \(test_reg[25:16]==V1\)) showline
+sf (     $fdisplay\(fname,"V1: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h\\n", i, V1, test_reg[25:16]\);) showline
+sf (   else) showline
+sf (    begin) showline
+sf (     $fdisplay\(fname,"V1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h\\n", i, V1, test_reg[25:16]\);) showline
+sf (     $fdisplay\(results,"V1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%) showline
+sf (h ACTUAL_DATA=%h\\n", i, V1, test_reg[25:16]\);) showline
+sf (     fail_count1= fail_count1+1;) showline
+sf (    end) showline
+sf (  end) showline
+sf (   end) showline
+sf ( ) showline
+sf () showline
+sf (//testing the second half of the lut.) showline
+sf (for \(i=128; i<256; i=i+1\)) showline
+sf (  begin) showline
+sf (    mov_dw\(MEM_WR, rbase_w+8'h58, 32'h0000_0100+i, 4'h0, 1\);) showline
+sf (    rd \(MEM_RD, rbase_w+8'h5c, 1\);) showline
+sf ( ) showline
+sf ( temp_v0 = \(1.371*2*\(i-'d128\)\);) showline
+sf ( V0=temp_v0;) showline
+sf ( ) showline
+sf ( temp_v1 = \(0.698*4*\(i-'d128\)\);) showline
+sf ( V1=temp_v1;) showline
+sf () showline
+sf (  begin) showline
+(3) 1 endcol
+(3) endpage
+%%Page: ? 4
+(4) newpage
+/MailFor (Listing for ) def
+/User (Naser) def
+/TimeNow (Wed Aug 23 11:09:47 1995) def
+/Subject (YUV_LUT_VERIFY_TEST) def
+sf (   if \(test_reg[9:0]==V0\)) showline
+sf (     $fdisplay\(fname,"V0: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h", i, V0, test_reg[9:0]\);) showline
+sf (   else) showline
+sf (    begin) showline
+sf (     $fdisplay\(fname,"V0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h", i, V0, test_reg[9:0]\);) showline
+sf (     $fdisplay\(results,"V0: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%) showline
+sf (h ACTUAL_DATA=%h", i, V0, test_reg[9:0]\);) showline
+sf (     fail_count1= fail_count1+1;) showline
+sf (    end) showline
+sf (  end) showline
+sf ( ) showline
+sf (   begin) showline
+sf (    if \(test_reg[25:16]==V1\)) showline
+sf (     $fdisplay\(fname,"V1: COMPARISON PASSED   LOCATION=%d      EXPECTED_DATA=%h ) showline
+sf (ACTUAL_DATA=%h\\n", i, V1, test_reg[25:16]\);) showline
+sf (    else) showline
+sf (     begin) showline
+sf (      $fdisplay\(fname,"V1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=%h) showline
+sf ( ACTUAL_DATA=%h\\n", i, V1, test_reg[25:16]\);) showline
+sf (      $fdisplay\(results,"V1: COMPARISON FAILED!! LOCATION=%d      EXPECTED_DATA=) showline
+sf (%h ACTUAL_DATA=%h\\n", i, V1, test_reg[25:16]\);) showline
+sf (      fail_count1= fail_count1+1;) showline
+sf (     end) showline
+sf (   end) showline
+sf (    end) showline
+sf ( ) showline
+sf () showline
+sf () showline
+sf ($fdisplay\(fname,"\\n*************************************************************) showline
+sf (***********************"\);) showline
+sf ($fdisplay\(fname,"***************************************************************) showline
+sf (*********************"\);) showline
+sf ($fdisplay\(fname,"       END YUV_LUT_VERIFY TEST , NUMBER OF FAILURES IN U TABLE ) showline
+sf (=%d", fail_count0\);) showline
+sf ($fdisplay\(fname,"                                 NUMBER OF FAILURES IN V TABLE ) showline
+sf (=%d", fail_count1\);  ) showline
+sf ($fdisplay\(fname,"***************************************************************) showline
+sf (*********************"\);) showline
+sf ($fdisplay\(fname,"***************************************************************) showline
+sf (*********************\\n"\);) showline
+sf () showline
+sf (  $fdisplay\(results, "\\n*******************************************"\);) showline
+sf (  $fdisplay\(results, "*******************************************"\);) showline
+sf (  $fdisplay\(results, "            YUV_LUT_VERIFY END               "\);) showline
+sf (  $fdisplay\(results, "*******************************************"\);) showline
+sf (  $fdisplay\(results, "*******************************************\\n"\);) showline
+sf () showline
+sf () showline
+sf ( REV2_STIM.close_file\("hb_test_result/yuv_lut_verify.res"\);) showline
+sf () showline
+sf (  end) showline
+sf (endtask) showline
+(4) 1 endcol
+(4) endpage
+%%Trailer
+%%Pages: 4
