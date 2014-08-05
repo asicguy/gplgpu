@@ -1,0 +1,17 @@
+64x16, 16 Bits/Pixel; width = 128
+.....[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[..........................
+.....[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[..........................
+.....[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[..........................
+.....[[[[[[[[[[[[[[[[[[[[[[[[[[xxxxxxxxxx++xxxxxxxxxx++xxxxxxxxx
+.....[[[[[[[[[[[^^^^^^^^^^^^^^^xxxxxxxxx+xxx++xxxx++xxx+xxxxxxxx
+.....[[[[[[[[[[[^^^^^^^^^^^^^^^xxxxxxxx+xxx+x+xxxx+x+xxx+xxxxxxx
+.....[[[[[[[[[[[^^^^^^^^^^^^^^^xxxxxxxx+xxx++xxxxxx++xxx+xxxxxxx
+................^^^^^^^^^^^^^^^xxxxxxx+xxxxxxxx++xxxxxxxx+xxxxxx
+................^^^^^^^^^^^^^^^xxxxxxx+xxxxxxx++++xxxxxxx+xxxxxx
+................^^^^^^^^^^^^^^^xxxxxxxx+xxx+xxxxxxxx+xxx+xxxxxxx
+................^^^^^^^^^^^^^^^xxxxxxxx+xxxx++xxxx++xxxx+xxxxxxx
+...............................xxxxxxxxx+xxxxx++++xxxxx+xxxxxxxx
+...............................xxxxxxxxxx++xxxxxxxxxx++xxxxxxxxx
+...............................xxxxxxxxxxxx+++xxxx+++xxxxxxxxxxx
+...............................xxxxxxxxxxxxxxx++++xxxxxxxxxxxxxx
+...............................xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
