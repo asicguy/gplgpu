@@ -289,10 +289,10 @@ always @(posedge de_clk) begin
 			end
     		default:
 			begin
-				 ee_tag_adr_rd = ul_tag_adr_bpt[5:1];
-				 oe_tag_adr_rd = ur_tag_adr_bpt[5:1];
-				 eo_tag_adr_rd = ll_tag_adr_bpt[5:1];
-				 oo_tag_adr_rd = lr_tag_adr_bpt[5:1];
+				 ee_tag_adr_rd <= ul_tag_adr_bpt[5:1];
+				 oe_tag_adr_rd <= ur_tag_adr_bpt[5:1];
+				 eo_tag_adr_rd <= ll_tag_adr_bpt[5:1];
+				 oo_tag_adr_rd <= lr_tag_adr_bpt[5:1];
 			end
   		endcase
 	end
