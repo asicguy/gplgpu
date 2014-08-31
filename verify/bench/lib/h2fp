@@ -1,0 +1,14 @@
+#!/u/local/bin/perl -w
+
+# PERL hex-to-float converter
+
+if( @ARGV == 0 ){
+    die ( "h2fp returns the floating point value corresponding to an input hex value.
+E.g.: \"h2fp 40a00000\" returns \"5.0\"\n" );
+}
+
+$x0 = hex( $ARGV[0] );
+$tmp = pack "I*", $x0;
+$foo = unpack "f*", $tmp;
+printf "%f\n", $foo;
+

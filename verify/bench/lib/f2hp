@@ -1,0 +1,15 @@
+#!/u/local/bin/perl -w
+
+# PERL float-to-hex converter
+
+if( @ARGV == 0 ){
+    die (
+"f2hp returns the hex value corresponding to an input floating point value.
+E.g.: \"f2hp 5.0\" returns \"40a00000\"\n" );
+}
+
+$x0 = $ARGV[0];
+$tmp = pack "f*", $x0;
+$foo = unpack "I*", $tmp;
+printf "%x\n", $foo;
+
